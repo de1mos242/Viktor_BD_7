@@ -379,6 +379,9 @@ function launchConfetti() {
 }
 
 async function loadSteps() {
+  if (window.location.protocol === "file:") {
+    return DEFAULT_STEPS.steps;
+  }
   try {
     const response = await fetch("steps.json", { cache: "no-store" });
     if (!response.ok) {
