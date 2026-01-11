@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Квест-визард</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <main class="app">
+      <header class="app__header">
+        <h1>Квест‑визард</h1>
+        <p class="app__subtitle">Выполняй задания и находи подсказки!</p>
+      </header>
+
+      <section class="progress" aria-label="Прогресс">
+        <div class="progress__row">
+          <span id="stepCounter">Шаг 1 из 1</span>
+          <span id="attemptsCounter">Попыток: 0</span>
+        </div>
+        <div class="progress__bar" aria-hidden="true">
+          <div id="progressFill" class="progress__fill"></div>
+        </div>
+      </section>
+
+      <section id="tokenBox" class="tokens" hidden>
+        <span class="tokens__label">Собрано:</span>
+        <span id="tokensValue" class="tokens__value"></span>
+      </section>
+
+      <section id="card" class="card" aria-live="polite">
+        <div class="card__heading">
+          <h2 id="stepTitle">Шаг</h2>
+          <p id="stepSubtitle" class="card__subtitle"></p>
+        </div>
+        <p id="stepPrompt" class="card__prompt"></p>
+
+        <form id="answerForm" class="card__form" autocomplete="off">
+          <label class="card__label" for="answerInput">Твой ответ:</label>
+          <input
+            id="answerInput"
+            name="answer"
+            class="card__input"
+            type="text"
+            inputmode="text"
+            placeholder="Напиши ответ"
+            required
+          />
+          <div class="card__buttons">
+            <button id="checkButton" class="btn btn--primary" type="submit">
+              Проверить
+            </button>
+            <button id="hintButton" class="btn btn--ghost" type="button">
+              Подсказка
+            </button>
+          </div>
+        </form>
+
+        <div id="messageBox" class="message" role="status" aria-live="polite"></div>
+
+        <button id="nextButton" class="btn btn--success" type="button" hidden>
+          Дальше
+        </button>
+      </section>
+
+      <section class="controls">
+        <button id="resetButton" class="btn btn--danger btn--corner" type="button">
+          Сброс (для родителей)
+        </button>
+      </section>
+    </main>
+
+    <div id="confetti" class="confetti" aria-hidden="true"></div>
+
+    <script src="app.js"></script>
+  </body>
+</html>

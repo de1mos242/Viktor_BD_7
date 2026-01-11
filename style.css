@@ -1,0 +1,275 @@
+:root {
+  color-scheme: dark;
+  font-family: "Comic Sans MS", "Trebuchet MS", "Segoe UI", sans-serif;
+  --bg: #0b1020;
+  --card: #161f3b;
+  --accent: #7ef9ff;
+  --accent-2: #ffd166;
+  --text: #f6f7fb;
+  --muted: #b3c0e1;
+  --success: #39d98a;
+  --danger: #ff6b6b;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: radial-gradient(circle at top, #1d2b5a, var(--bg));
+  color: var(--text);
+}
+
+.app {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 24px 20px 64px;
+}
+
+.app__header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.app__header h1 {
+  margin: 0 0 8px;
+  font-size: clamp(2rem, 4vw, 3rem);
+}
+
+.app__subtitle {
+  margin: 0;
+  color: var(--muted);
+  font-size: 1.1rem;
+}
+
+.progress {
+  margin: 20px 0;
+  padding: 16px;
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 16px;
+}
+
+.progress__row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 1rem;
+  margin-bottom: 12px;
+}
+
+.progress__bar {
+  width: 100%;
+  height: 12px;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.progress__fill {
+  height: 100%;
+  width: 0;
+  background: linear-gradient(90deg, var(--accent), var(--accent-2));
+  transition: width 0.4s ease;
+}
+
+.tokens {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.08);
+  padding: 10px 16px;
+  border-radius: 12px;
+  margin-bottom: 16px;
+  font-size: 1rem;
+}
+
+.tokens__label {
+  color: var(--accent-2);
+  font-weight: 700;
+}
+
+.card {
+  background: var(--card);
+  border-radius: 24px;
+  padding: 24px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.35);
+}
+
+.card__heading {
+  margin-bottom: 16px;
+}
+
+.card__heading h2 {
+  margin: 0 0 6px;
+  font-size: clamp(1.6rem, 3vw, 2.2rem);
+}
+
+.card__subtitle {
+  margin: 0;
+  color: var(--muted);
+}
+
+.card__prompt {
+  font-size: 1.2rem;
+  line-height: 1.5;
+  margin-bottom: 20px;
+}
+
+.card__form {
+  display: grid;
+  gap: 12px;
+}
+
+.card__label {
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+.card__input {
+  width: 100%;
+  padding: 14px 16px;
+  border-radius: 12px;
+  border: 2px solid transparent;
+  font-size: 1.2rem;
+  background: #0e1530;
+  color: var(--text);
+}
+
+.card__input:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(126, 249, 255, 0.25);
+}
+
+.card__buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.btn {
+  padding: 14px 20px;
+  border-radius: 14px;
+  border: none;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.1s ease, box-shadow 0.2s ease;
+}
+
+.btn:active {
+  transform: scale(0.98);
+}
+
+.btn--primary {
+  background: var(--accent);
+  color: #071421;
+  box-shadow: 0 8px 20px rgba(126, 249, 255, 0.3);
+}
+
+.btn--ghost {
+  background: transparent;
+  color: var(--text);
+  border: 2px dashed rgba(255, 255, 255, 0.4);
+}
+
+.btn--ghost:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.btn--success {
+  margin-top: 18px;
+  width: 100%;
+  background: var(--success);
+  color: #032216;
+}
+
+.btn--danger {
+  background: var(--danger);
+  color: #2b0d0d;
+}
+
+.btn--corner {
+  padding: 8px 12px;
+  font-size: 0.85rem;
+  opacity: 0.55;
+}
+
+.btn--corner:hover,
+.btn--corner:focus {
+  opacity: 0.9;
+}
+
+.message {
+  margin-top: 16px;
+  padding: 16px;
+  border-radius: 16px;
+  border: 2px solid transparent;
+  min-height: 60px;
+  font-size: 1.1rem;
+  display: flex;
+  align-items: center;
+}
+
+.message--error {
+  border-color: var(--danger);
+  background: rgba(255, 107, 107, 0.15);
+}
+
+.message--success {
+  border-color: var(--success);
+  background: rgba(57, 217, 138, 0.18);
+}
+
+.message--hint {
+  border-color: var(--accent-2);
+  background: rgba(255, 209, 102, 0.15);
+}
+
+.controls {
+  position: fixed;
+  top: 12px;
+  right: 12px;
+  z-index: 10;
+}
+
+.confetti {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 100;
+}
+
+.confetti-piece {
+  position: absolute;
+  width: 10px;
+  height: 18px;
+  opacity: 0.8;
+  animation: fall 3.5s linear forwards;
+}
+
+@keyframes fall {
+  0% {
+    transform: translateY(-20vh) rotate(0deg);
+  }
+  100% {
+    transform: translateY(110vh) rotate(360deg);
+  }
+}
+
+@media (max-width: 600px) {
+  .card {
+    padding: 20px;
+  }
+
+  .card__buttons {
+    flex-direction: column;
+  }
+
+  .btn {
+    width: 100%;
+  }
+}

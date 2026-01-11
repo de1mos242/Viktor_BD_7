@@ -1,0 +1,99 @@
+{
+  "steps": [
+    {
+      "id": "count-stars",
+      "title": "Шаг 1: Сосчитай звёзды",
+      "subtitle": "Маленькое начало",
+      "prompt": "Сколько будет 2 + 3?",
+      "input": {
+        "type": "number",
+        "placeholder": "Ответ числом",
+        "inputMode": "numeric"
+      },
+      "answers": ["5", "пять"],
+      "hint": "Подумай про два яблока и ещё три яблока.",
+      "hintAfterTries": 1,
+      "successMessage": "Отлично! Следующая записка спрятана в шкафу под полотенцами.",
+      "collectToken": "3"
+    },
+    {
+      "id": "magic-word",
+      "title": "Шаг 2: Волшебное слово",
+      "subtitle": "Буквы любят порядок",
+      "prompt": "Слово «КОТ» без первой буквы — что останется?",
+      "input": {
+        "type": "text",
+        "placeholder": "Напиши слово",
+        "inputMode": "text"
+      },
+      "answers": ["от"],
+      "hint": "Просто убери букву К.",
+      "hintAfterTries": 2,
+      "successMessage": "Супер! Посмотри подсказку возле дивана под подушкой.",
+      "collectToken": "8"
+    },
+    {
+      "id": "quick-count",
+      "title": "Шаг 3: Быстрый счёт",
+      "prompt": "Сколько будет 7 − 4?",
+      "input": {
+        "type": "number",
+        "placeholder": "Ответ числом",
+        "inputMode": "numeric"
+      },
+      "answers": ["3", "три"],
+      "hint": "От семи убери четыре.",
+      "hintAfterTries": 1,
+      "successMessage": "Правильно! Следующая записка ждёт тебя у книжной полки.",
+      "collectToken": "2"
+    },
+    {
+      "id": "riddle",
+      "title": "Шаг 4: Загадка",
+      "subtitle": "Угадай предмет",
+      "prompt": "Я круглый, со стрелками, показываю время. Кто я?",
+      "input": {
+        "type": "text",
+        "placeholder": "Напиши ответ",
+        "inputMode": "text"
+      },
+      "answers": ["часы", "часики"],
+      "hint": "Это висит на стене или стоит на столе.",
+      "hintAfterTries": 2,
+      "successMessage": "Есть! Подсказка спрятана в коробке с играми.",
+      "collectToken": "6"
+    },
+    {
+      "id": "rebus",
+      "title": "Шаг 5: Ребус",
+      "subtitle": "Собери слово",
+      "prompt": "Ребус: СЫР + КА = ? (получится одно слово)",
+      "input": {
+        "type": "text",
+        "placeholder": "Напиши слово",
+        "inputMode": "text"
+      },
+      "answers": ["сырка", "сырок"],
+      "hint": "Сложи два кусочка вместе.",
+      "hintAfterTries": 2,
+      "successMessage": "Класс! Следующая записка лежит в ящике письменного стола.",
+      "collectToken": "4"
+    },
+    {
+      "id": "final",
+      "title": "Финал: общий шифр",
+      "subtitle": "Собери цифры",
+      "prompt": "Введи общий шифр из собранных цифр по порядку.",
+      "input": {
+        "type": "text",
+        "placeholder": "Напиши код",
+        "inputMode": "numeric"
+      },
+      "answers": ["38264"],
+      "hint": "Посмотри строку «Собрано».",
+      "hintAfterTries": 1,
+      "successMessage": "ПОБЕДА! Главный приз спрятан в коробке в шкафу на нижней полке.",
+      "isFinal": true
+    }
+  ]
+}
