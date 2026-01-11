@@ -44,28 +44,9 @@ body {
   position: relative;
 }
 
-.app::before {
-  content: "✨  •  🌊  •  ✨";
-  position: absolute;
-  top: 8px;
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 1.2rem;
-  color: rgba(255, 255, 255, 0.65);
-  letter-spacing: 0.4rem;
-}
-
 .app__header {
   text-align: center;
   margin-bottom: 20px;
-}
-
-.app__eyebrow {
-  margin: 0 0 8px;
-  font-size: 1rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--accent-2);
 }
 
 .app__header h1 {
@@ -79,23 +60,6 @@ body {
   margin: 0;
   color: var(--muted);
   font-size: 1.1rem;
-}
-
-.app__flair {
-  margin: 8px auto 0;
-  color: rgba(255, 255, 255, 0.75);
-  font-size: 1rem;
-}
-
-.app__banner {
-  margin: 16px auto 0;
-  display: inline-flex;
-  gap: 12px;
-  padding: 10px 18px;
-  border-radius: 999px;
-  background: rgba(0, 0, 0, 0.35);
-  border: 1px dashed rgba(255, 255, 255, 0.25);
-  font-size: 1.2rem;
 }
 
 .progress {
@@ -320,10 +284,17 @@ body {
   top: 12px;
   right: 12px;
   z-index: 10;
+  max-width: calc(100% - 24px);
 }
 
 .controls .btn--corner::before {
   content: "🦜 ";
+}
+
+.btn--corner {
+  max-width: 100%;
+  white-space: normal;
+  text-align: left;
 }
 
 .confetti {
