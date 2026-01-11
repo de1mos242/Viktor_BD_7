@@ -3,14 +3,18 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Квест-визард</title>
+    <title>Пиратский квест</title>
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
     <main class="app">
       <header class="app__header">
-        <h1>Квест‑визард</h1>
-        <p class="app__subtitle">Выполняй задания и находи подсказки!</p>
+        <p class="app__eyebrow">Йо‑хо‑хо! 🏴‍☠️</p>
+        <h1>Пиратский квест</h1>
+        <p class="app__subtitle">Собирай монеты, открывай сундуки и ищи карту сокровищ!</p>
+        <div class="app__banner" aria-hidden="true">
+          ⚓️ ⚔️ 💰 🗺️ 🦜
+        </div>
       </header>
 
       <section class="progress" aria-label="Прогресс">
@@ -24,7 +28,7 @@
       </section>
 
       <section id="tokenBox" class="tokens" hidden>
-        <span class="tokens__label">Собрано:</span>
+        <span class="tokens__label">Добыча:</span>
         <span id="tokensValue" class="tokens__value"></span>
       </section>
 

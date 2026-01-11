@@ -1,14 +1,18 @@
+@import url("https://fonts.googleapis.com/css2?family=Pirata+One&family=Nunito:wght@400;600;700&display=swap");
+
 :root {
   color-scheme: dark;
-  font-family: "Comic Sans MS", "Trebuchet MS", "Segoe UI", sans-serif;
+  font-family: "Nunito", "Segoe UI", sans-serif;
   --bg: #0b1020;
-  --card: #161f3b;
-  --accent: #7ef9ff;
-  --accent-2: #ffd166;
-  --text: #f6f7fb;
-  --muted: #b3c0e1;
+  --card: #1e1a2b;
+  --accent: #ffcc4d;
+  --accent-2: #66d7ee;
+  --text: #f9f1d5;
+  --muted: #d1c4a7;
   --success: #39d98a;
   --danger: #ff6b6b;
+  --wood: #3d2b1f;
+  --sand: #e3c57a;
 }
 
 * {
@@ -18,7 +22,14 @@
 body {
   margin: 0;
   min-height: 100vh;
-  background: radial-gradient(circle at top, #1d2b5a, var(--bg));
+  background: radial-gradient(circle at top, #2a3b6b, #0f1a36 50%, var(--bg)),
+    repeating-linear-gradient(
+      45deg,
+      rgba(255, 255, 255, 0.03),
+      rgba(255, 255, 255, 0.03) 10px,
+      rgba(0, 0, 0, 0.03) 10px,
+      rgba(0, 0, 0, 0.03) 20px
+    );
   color: var(--text);
 }
 
@@ -26,6 +37,7 @@ body {
   max-width: 760px;
   margin: 0 auto;
   padding: 24px 20px 64px;
+  position: relative;
 }
 
 .app__header {
@@ -33,9 +45,19 @@ body {
   margin-bottom: 20px;
 }
 
+.app__eyebrow {
+  margin: 0 0 8px;
+  font-size: 1rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--accent-2);
+}
+
 .app__header h1 {
   margin: 0 0 8px;
-  font-size: clamp(2rem, 4vw, 3rem);
+  font-family: "Pirata One", "Nunito", serif;
+  font-size: clamp(2.4rem, 4vw, 3.4rem);
+  text-shadow: 0 6px 16px rgba(0, 0, 0, 0.5);
 }
 
 .app__subtitle {
@@ -44,11 +66,23 @@ body {
   font-size: 1.1rem;
 }
 
+.app__banner {
+  margin: 16px auto 0;
+  display: inline-flex;
+  gap: 12px;
+  padding: 10px 18px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px dashed rgba(255, 255, 255, 0.25);
+  font-size: 1.2rem;
+}
+
 .progress {
   margin: 20px 0;
   padding: 16px;
-  background: rgba(255, 255, 255, 0.04);
+  background: rgba(0, 0, 0, 0.35);
   border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .progress__row {
@@ -61,7 +95,7 @@ body {
 .progress__bar {
   width: 100%;
   height: 12px;
-  background: rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.1);
   border-radius: 999px;
   overflow: hidden;
 }
@@ -77,23 +111,32 @@ body {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(0, 0, 0, 0.4);
   padding: 10px 16px;
   border-radius: 12px;
   margin-bottom: 16px;
   font-size: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .tokens__label {
-  color: var(--accent-2);
+  color: var(--accent);
   font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.tokens__label::before {
+  content: "💰";
 }
 
 .card {
-  background: var(--card);
+  background: linear-gradient(180deg, rgba(61, 43, 31, 0.9), rgba(30, 26, 43, 0.95));
   border-radius: 24px;
   padding: 24px;
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.35);
+  border: 2px solid rgba(255, 204, 77, 0.15);
 }
 
 .card__heading {
@@ -114,6 +157,16 @@ body {
   font-size: 1.2rem;
   line-height: 1.5;
   margin-bottom: 20px;
+  position: relative;
+}
+
+.card__prompt::after {
+  content: "🧭";
+  position: absolute;
+  right: 0;
+  top: -6px;
+  font-size: 1.5rem;
+  opacity: 0.7;
 }
 
 .card__form {
@@ -132,7 +185,7 @@ body {
   border-radius: 12px;
   border: 2px solid transparent;
   font-size: 1.2rem;
-  background: #0e1530;
+  background: rgba(15, 24, 44, 0.8);
   color: var(--text);
 }
 
@@ -156,6 +209,7 @@ body {
   font-weight: 700;
   cursor: pointer;
   transition: transform 0.1s ease, box-shadow 0.2s ease;
+  font-family: inherit;
 }
 
 .btn:active {
@@ -163,9 +217,9 @@ body {
 }
 
 .btn--primary {
-  background: var(--accent);
-  color: #071421;
-  box-shadow: 0 8px 20px rgba(126, 249, 255, 0.3);
+  background: linear-gradient(120deg, #ffcc4d, #f0a202);
+  color: #3a2500;
+  box-shadow: 0 8px 20px rgba(240, 162, 2, 0.4);
 }
 
 .btn--ghost {
@@ -182,12 +236,12 @@ body {
 .btn--success {
   margin-top: 18px;
   width: 100%;
-  background: var(--success);
+  background: linear-gradient(120deg, #39d98a, #2e9c62);
   color: #032216;
 }
 
 .btn--danger {
-  background: var(--danger);
+  background: linear-gradient(120deg, #ff6b6b, #c44545);
   color: #2b0d0d;
 }
 
@@ -211,6 +265,7 @@ body {
   font-size: 1.1rem;
   display: flex;
   align-items: center;
+  background: rgba(0, 0, 0, 0.25);
 }
 
 .message--error {
@@ -233,6 +288,10 @@ body {
   top: 12px;
   right: 12px;
   z-index: 10;
+}
+
+.controls .btn--corner::before {
+  content: "🦜 ";
 }
 
 .confetti {
