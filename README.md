@@ -1,34 +1,34 @@
-# Квест‑визард (офлайн)
+# Quest Wizard (offline)
 
-Одностраничный офлайн‑квест для ребёнка: шаги, ответы, подсказки и финальная победа.
+Single-page offline quest for kids: steps, answers, hints, and a final win.
 
-## Запуск
+## Run locally
 
-1. Откройте `index.html` двойным кликом или перетащите файл в браузер.
-2. Всё работает без сервера и без сборки.
+1. Open `index.html` by double-clicking it or dragging it into a browser.
+2. Everything works without a server or build step.
 
-## Публикация в интернет (GitHub Pages)
+## Publish online (GitHub Pages)
 
-1. Переименуйте `steps.example.json` в `steps.json` и заполните своими шагами.
-2. Закоммитьте изменения и отправьте их в репозиторий на GitHub.
-3. В репозитории откройте **Settings → Pages** и выберите **Source: GitHub Actions**.
-4. Дождитесь выполнения workflow **Deploy to GitHub Pages**.
-5. Ссылка на опубликованную страницу появится в разделе **Pages** и в списке деплоев workflow.
+1. Rename `steps.example.json` to `steps.json` and fill it with your steps.
+2. Commit the changes and push them to GitHub.
+3. In the repository, open **Settings → Pages** and select **Source: GitHub Actions**.
+4. Wait for the **Deploy to GitHub Pages** workflow to complete.
+5. The published page URL will appear under **Pages** and in the workflow deployments list.
 
-После этого страница будет открываться по публичному URL отовсюду.
+After that, the page will be available from the public URL anywhere.
 
-> Можно смотреть промежуточные результаты без мержа: просто пушьте изменения в свою ветку —
-> workflow запустится и опубликует текущую версию. URL останется тем же, но будет содержать
-> самую свежую деплой‑версию.
+> You can preview intermediate results without merging: just push changes to your branch —
+> the workflow will run and publish the current version. The URL stays the same but serves
+> the latest deployed version.
 
-## Настройка шагов
+## Configure steps
 
-1. Переименуйте `steps.example.json` в `steps.json`.
-2. Отредактируйте `steps.json` под свой квест.
-3. Если открываете страницу как `file://`, браузеры блокируют чтение `steps.json`.
-   Чтобы подхватить файл, запустите простой локальный сервер или откройте страницу по HTTP.
+1. Rename `steps.example.json` to `steps.json`.
+2. Edit `steps.json` for your quest.
+3. If you open the page as `file://`, browsers block reading `steps.json`.
+   To load the file, run a simple local server or open the page over HTTP.
 
-### Формат `steps.json`
+### `steps.json` format
 
 ```json
 {
@@ -55,13 +55,13 @@
 }
 ```
 
-- Ответы сравниваются так: `trim + lowerCase`.
-- Если `allowRegex: true`, ответы трактуются как регулярные выражения.
-- Если хотя бы один шаг содержит `collectToken`, показывается строка «Собрано».
+- Answers are compared as `trim + lowerCase`.
+- If `allowRegex: true`, answers are treated as regular expressions.
+- If at least one step contains `collectToken`, the “Собрано” line is shown.
 
-## Сброс прогресса
+## Reset progress
 
-- В интерфейсе нажмите **«Сброс (для родителей)»** и введите PIN.
-- Автоматический сброс: добавьте `?reset=1` к адресу страницы.
+- In the UI, click **«Сброс (для родителей)»** and enter the PIN.
+- Automatic reset: add `?reset=1` to the page URL.
 
-PIN по умолчанию хранится в `app.js` (`PARENT_PIN`).
+The default PIN is stored in `app.js` (`PARENT_PIN`).
