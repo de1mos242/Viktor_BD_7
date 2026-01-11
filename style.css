@@ -22,7 +22,11 @@
 body {
   margin: 0;
   min-height: 100vh;
-  background: radial-gradient(circle at top, #2a3b6b, #0f1a36 50%, var(--bg)),
+  background:
+    linear-gradient(180deg, rgba(11, 16, 32, 0.75), rgba(11, 16, 32, 0.95)),
+    url("https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1600&q=80")
+      center/cover no-repeat,
+    radial-gradient(circle at top, #2a3b6b, #0f1a36 50%, var(--bg)),
     repeating-linear-gradient(
       45deg,
       rgba(255, 255, 255, 0.03),
@@ -38,6 +42,17 @@ body {
   margin: 0 auto;
   padding: 24px 20px 64px;
   position: relative;
+}
+
+.app::before {
+  content: "✨  •  🌊  •  ✨";
+  position: absolute;
+  top: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 1.2rem;
+  color: rgba(255, 255, 255, 0.65);
+  letter-spacing: 0.4rem;
 }
 
 .app__header {
@@ -64,6 +79,12 @@ body {
   margin: 0;
   color: var(--muted);
   font-size: 1.1rem;
+}
+
+.app__flair {
+  margin: 8px auto 0;
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 1rem;
 }
 
 .app__banner {
@@ -137,6 +158,17 @@ body {
   padding: 24px;
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.35);
   border: 2px solid rgba(255, 204, 77, 0.15);
+  position: relative;
+  overflow: hidden;
+}
+
+.card::before {
+  content: "🧰";
+  position: absolute;
+  top: 14px;
+  right: 16px;
+  font-size: 1.4rem;
+  opacity: 0.35;
 }
 
 .card__heading {
