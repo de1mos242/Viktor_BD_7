@@ -18,6 +18,11 @@ const DEFAULT_STEPS = {
       hintAfterTries: 1,
       successMessage: "Отлично! Следующая записка спрятана в шкафу под полотенцами.",
       collectToken: "3",
+      image: {
+        src: "https://images.unsplash.com/photo-1444703686981-a3abbc4d4fe3?auto=format&fit=crop&w=900&q=80",
+        alt: "Ночное небо со звёздами.",
+        caption: "Сосчитай звёзды, чтобы найти ответ.",
+      },
     },
     {
       id: "magic-word",
@@ -34,6 +39,11 @@ const DEFAULT_STEPS = {
       hintAfterTries: 2,
       successMessage: "Супер! Посмотри подсказку возле дивана под подушкой.",
       collectToken: "8",
+      image: {
+        src: "https://images.unsplash.com/photo-1476480862126-209bfaa8edc8?auto=format&fit=crop&w=900&q=80",
+        alt: "Пиратский корабль в море.",
+        caption: "Немного пиратского настроения для волшебного слова.",
+      },
     },
     {
       id: "quick-count",
@@ -49,6 +59,11 @@ const DEFAULT_STEPS = {
       hintAfterTries: 1,
       successMessage: "Правильно! Следующая записка ждёт тебя у книжной полки.",
       collectToken: "2",
+      image: {
+        src: "https://images.unsplash.com/photo-1526304640581-d334cdbbf45e?auto=format&fit=crop&w=900&q=80",
+        alt: "Монеты на деревянной поверхности.",
+        caption: "Считай быстро, как пират считает добычу.",
+      },
     },
     {
       id: "riddle",
@@ -65,6 +80,11 @@ const DEFAULT_STEPS = {
       hintAfterTries: 2,
       successMessage: "Есть! Подсказка спрятана в коробке с играми.",
       collectToken: "6",
+      image: {
+        src: "https://images.unsplash.com/photo-1501139083538-0139583c060f?auto=format&fit=crop&w=900&q=80",
+        alt: "Крупный план часов со стрелками.",
+        caption: "Подсказка на картинке: что показывает время?",
+      },
     },
     {
       id: "rebus",
@@ -81,6 +101,11 @@ const DEFAULT_STEPS = {
       hintAfterTries: 2,
       successMessage: "Класс! Следующая записка лежит в ящике письменного стола.",
       collectToken: "4",
+      image: {
+        src: "https://images.unsplash.com/photo-1486297678162-eb2a19b0a32d?auto=format&fit=crop&w=900&q=80",
+        alt: "Кусочки сыра на столе.",
+        caption: "Ребус про сыр — картинка поможет.",
+      },
     },
     {
       id: "final",
@@ -97,6 +122,11 @@ const DEFAULT_STEPS = {
       hintAfterTries: 1,
       successMessage: "ПОБЕДА! Главный приз спрятан в коробке в шкафу на нижней полке.",
       isFinal: true,
+      image: {
+        src: "https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=900&q=80",
+        alt: "Старинная карта и компас.",
+        caption: "Финальная карта укажет путь к сокровищу.",
+      },
     },
   ],
 };
@@ -109,6 +139,9 @@ const elements = {
   tokensValue: document.getElementById("tokensValue"),
   stepTitle: document.getElementById("stepTitle"),
   stepSubtitle: document.getElementById("stepSubtitle"),
+  stepMedia: document.getElementById("stepMedia"),
+  stepImage: document.getElementById("stepImage"),
+  stepCaption: document.getElementById("stepCaption"),
   stepPrompt: document.getElementById("stepPrompt"),
   answerForm: document.getElementById("answerForm"),
   answerInput: document.getElementById("answerInput"),
@@ -299,6 +332,19 @@ function renderStep() {
   elements.stepTitle.textContent = step.title;
   elements.stepSubtitle.textContent = step.subtitle || "";
   elements.stepSubtitle.hidden = !step.subtitle;
+  if (step.image?.src) {
+    elements.stepMedia.hidden = false;
+    elements.stepImage.src = step.image.src;
+    elements.stepImage.alt = step.image.alt || step.title;
+    elements.stepCaption.textContent = step.image.caption || "";
+    elements.stepCaption.hidden = !step.image.caption;
+  } else {
+    elements.stepMedia.hidden = true;
+    elements.stepImage.src = "";
+    elements.stepImage.alt = "";
+    elements.stepCaption.textContent = "";
+    elements.stepCaption.hidden = true;
+  }
   elements.stepPrompt.textContent = step.prompt;
   elements.answerInput.type = step.input?.type || "text";
   elements.answerInput.placeholder = step.input?.placeholder || "";
