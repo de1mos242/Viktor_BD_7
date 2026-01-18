@@ -151,6 +151,11 @@ body {
   font-size: 1rem;
 }
 
+.card__note--hint {
+  border: 1px dashed rgba(255, 255, 255, 0.2);
+  color: var(--text);
+}
+
 .card__form {
   display: grid;
   gap: 12px;
