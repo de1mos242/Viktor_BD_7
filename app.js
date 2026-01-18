@@ -153,6 +153,8 @@ const STEPS = [
   },
 ];
 
+const DEFAULT_STEP_IMAGE = "images/intro-comics.png";
+
 const elements = {
   stepCounter: document.getElementById("stepCounter"),
   attemptsCounter: document.getElementById("attemptsCounter"),
@@ -314,9 +316,9 @@ function renderStep() {
   elements.stepSubtitle.hidden = !step.subtitle;
   elements.stepPrompt.textContent = step.prompt;
 
-  elements.stepImage.src = step.image || "";
+  elements.stepImage.src = step.image || DEFAULT_STEP_IMAGE;
   elements.stepImage.alt = step.title;
-  elements.stepImage.hidden = !step.image;
+  elements.stepImage.hidden = false;
 
   if (step.note) {
     elements.stepNote.textContent = step.note;
