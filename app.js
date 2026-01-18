@@ -129,17 +129,12 @@ const STEPS = [
   },
   {
     id: "instructions",
-    type: "instructions",
+    type: "info",
     title: "Где искать ингредиенты",
     subtitle: "Смотри на картинки",
     prompt:
-      "Вот подсказки. Рядом с ингредиентом будет листик с кодом — это ответ.",
+      "Подсказки спрятаны рядом с ингредиентами. Нашёл листик — введи код.",
     image: "images/intro-comics.png",
-    checklist: TASKS.map((task) => ({
-      title: task.title,
-      hint: `${task.listHint}. Введи: «${task.answer}».`,
-      image: task.image,
-    })),
     nextLabel: "Поехали",
   },
   ...TASKS.map((task) => ({
@@ -168,21 +163,19 @@ const STEPS = [
 const DEFAULT_STEP_IMAGE = "images/intro-comics.png";
 
 const elements = {
-  stepCounter: document.getElementById("stepCounter"),
-  attemptsCounter: document.getElementById("attemptsCounter"),
   progressFill: document.getElementById("progressFill"),
+  card: document.getElementById("card"),
   stepTitle: document.getElementById("stepTitle"),
   stepSubtitle: document.getElementById("stepSubtitle"),
   stepPrompt: document.getElementById("stepPrompt"),
   stepHint: document.getElementById("stepHint"),
   stepNote: document.getElementById("stepNote"),
   stepImage: document.getElementById("stepImage"),
-  checklist: document.getElementById("checklist"),
+  answerLabel: document.getElementById("answerLabel"),
   answerForm: document.getElementById("answerForm"),
   answerInput: document.getElementById("answerInput"),
   checkButton: document.getElementById("checkButton"),
   messageBox: document.getElementById("messageBox"),
-  nextButton: document.getElementById("nextButton"),
   resetButton: document.getElementById("resetButton"),
 };
 
@@ -215,7 +208,6 @@ let state = getDefaultState();
 function getDefaultState() {
   return {
     currentStepIndex: 0,
-    attempts: {},
     solvedSteps: [],
   };
 }
@@ -268,14 +260,12 @@ function setMessage(text, type) {
 }
 
 function setSuccessState(step) {
-  setMessage("Верно! Можешь нажимать «Дальше».", "success");
-  elements.nextButton.hidden = false;
+  setMessage("Верно!", "success");
   elements.answerInput.disabled = true;
   elements.checkButton.disabled = true;
 }
 
 function setActiveState() {
-  elements.nextButton.hidden = true;
   elements.answerInput.disabled = false;
   elements.checkButton.disabled = false;
   elements.answerInput.value = "";
@@ -304,46 +294,33 @@ function markSolved(step) {
 function handleCorrect(step) {
   markSolved(step);
   setSuccessState(step);
+  advanceStep();
 }
 
 function handleWrong(step) {
-  state.attempts[step.id] = (state.attempts[step.id] || 0) + 1;
   saveState();
   setMessage("Почти! Попробуй ещё раз.", "error");
-  renderCounters();
 }
 
-function renderCounters() {
+function renderProgress() {
   const stepNumber = state.currentStepIndex + 1;
-  elements.stepCounter.textContent = `Шаг ${stepNumber} из ${STEPS.length}`;
-  const current = currentStep();
-  const attempts = state.attempts[current.id] || 0;
-  elements.attemptsCounter.textContent = `Попыток: ${attempts}`;
   const progress = (stepNumber / STEPS.length) * 100;
   elements.progressFill.style.width = `${progress}%`;
 }
 
-function renderChecklist(step) {
-  if (!step.checklist || step.checklist.length === 0) {
-    elements.checklist.hidden = true;
-    elements.checklist.innerHTML = "";
+function advanceStep() {
+  if (state.currentStepIndex >= STEPS.length - 1) {
     return;
   }
-
-  elements.checklist.hidden = false;
-  elements.checklist.innerHTML = step.checklist
-    .map(
-      (item) => `
-        <article class="checklist__item">
-          <img src="${item.image}" alt="${item.title}" />
-          <div>
-            <h3>${item.title}</h3>
-            <p>${item.hint}</p>
-          </div>
-        </article>
-      `,
-    )
-    .join("");
+  elements.card?.classList.remove("card--advance");
+  void elements.card?.offsetWidth;
+  elements.card?.classList.add("card--advance");
+  state.currentStepIndex = Math.min(
+    state.currentStepIndex + 1,
+    STEPS.length - 1,
+  );
+  saveState();
+  render();
 }
 
 function renderStep() {
@@ -373,10 +350,12 @@ function renderStep() {
     elements.stepNote.hidden = true;
   }
 
-  renderChecklist(step);
-
   if (step.type === "task") {
     elements.answerForm.hidden = false;
+    elements.answerLabel.hidden = false;
+    elements.answerInput.hidden = false;
+    elements.answerInput.required = true;
+    elements.checkButton.textContent = "Проверить";
     const solved = state.solvedSteps.includes(step.id);
     if (solved) {
       setSuccessState(step);
@@ -384,16 +363,18 @@ function renderStep() {
       setActiveState();
     }
   } else {
-    elements.answerForm.hidden = true;
-    elements.nextButton.hidden = false;
-    elements.nextButton.textContent = step.nextLabel || "Дальше";
+    elements.answerForm.hidden = false;
+    elements.answerLabel.hidden = true;
+    elements.answerInput.hidden = true;
+    elements.answerInput.required = false;
+    elements.checkButton.textContent = step.nextLabel || "Дальше";
     setMessage("", null);
   }
 }
 
 function render() {
   clampStepIndex();
-  renderCounters();
+  renderProgress();
   renderStep();
 }
 
@@ -406,6 +387,7 @@ function setupEvents() {
     event.preventDefault();
     const step = currentStep();
     if (step.type !== "task") {
+      advanceStep();
       return;
     }
     if (state.solvedSteps.includes(step.id)) {
@@ -416,15 +398,6 @@ function setupEvents() {
     } else {
       handleWrong(step);
     }
-  });
-
-  elements.nextButton.addEventListener("click", () => {
-    state.currentStepIndex = Math.min(
-      state.currentStepIndex + 1,
-      STEPS.length - 1,
-    );
-    saveState();
-    render();
   });
 
   elements.resetButton.addEventListener("click", () => {

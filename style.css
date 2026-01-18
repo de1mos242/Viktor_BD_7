@@ -71,13 +71,6 @@ body {
   border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
-.progress__row {
-  display: flex;
-  justify-content: space-between;
-  font-size: 1rem;
-  margin-bottom: 12px;
-}
-
 .progress__bar {
   width: 100%;
   height: 12px;
@@ -156,6 +149,22 @@ body {
   color: var(--text);
 }
 
+.card--advance {
+  animation: cardAdvance 0.4s ease;
+}
+
+@keyframes cardAdvance {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.01);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
 .card__form {
   display: grid;
   gap: 12px;
@@ -203,21 +212,14 @@ body {
   box-shadow: 0 8px 20px rgba(76, 175, 80, 0.4);
 }
 
-.btn--success {
-  margin-top: 18px;
-  width: 100%;
-  background: linear-gradient(120deg, #7ee8a2, #4caf50);
-  color: #082110;
-}
-
 .btn--danger {
   background: linear-gradient(120deg, #ff8a80, #ff5252);
   color: #2b0d0d;
 }
 
 .btn--corner {
-  padding: 8px 12px;
-  font-size: 0.85rem;
+  padding: 6px 8px;
+  font-size: 0.75rem;
   opacity: 0.55;
 }
 
@@ -248,43 +250,6 @@ body {
   background: rgba(90, 212, 138, 0.2);
 }
 
-.checklist {
-  display: grid;
-  gap: 12px;
-  margin-bottom: 16px;
-}
-
-.checklist__item {
-  display: grid;
-  grid-template-columns: 84px 1fr;
-  gap: 12px;
-  align-items: center;
-  background: rgba(0, 0, 0, 0.25);
-  border-radius: 16px;
-  padding: 10px 12px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-}
-
-.checklist__item img {
-  width: 84px;
-  height: 64px;
-  object-fit: contain;
-  border-radius: 12px;
-  background: rgba(0, 0, 0, 0.2);
-  padding: 6px;
-}
-
-.checklist__item h3 {
-  margin: 0 0 4px;
-  font-size: 1.05rem;
-}
-
-.checklist__item p {
-  margin: 0;
-  color: var(--muted);
-  font-size: 0.95rem;
-}
-
 .controls {
   position: fixed;
   top: 12px;
@@ -293,28 +258,25 @@ body {
   max-width: calc(100% - 24px);
 }
 
-.controls .btn--corner::before {
-  content: "🧑‍🍼 ";
-}
-
 .btn--corner {
   max-width: 100%;
   white-space: normal;
   text-align: left;
 }
 
+.btn--reset {
+  border-radius: 999px;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+}
+
 @media (max-width: 600px) {
   .card {
     padding: 20px;
-  }
-
-  .checklist__item {
-    grid-template-columns: 1fr;
-    text-align: left;
-  }
-
-  .checklist__item img {
-    width: 100%;
-    height: auto;
   }
 }

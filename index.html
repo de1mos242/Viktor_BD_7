@@ -15,10 +15,6 @@
       </header>
 
       <section class="progress" aria-label="Прогресс">
-        <div class="progress__row">
-          <span id="stepCounter">Шаг 1 из 1</span>
-          <span id="attemptsCounter">Попыток: 0</span>
-        </div>
         <div class="progress__bar" aria-hidden="true">
           <div id="progressFill" class="progress__fill"></div>
         </div>
@@ -38,10 +34,8 @@
 
         <p id="stepNote" class="card__note"></p>
 
-        <div id="checklist" class="checklist" hidden></div>
-
         <form id="answerForm" class="card__form" autocomplete="off">
-          <label class="card__label" for="answerInput">Код с листика:</label>
+          <label id="answerLabel" class="card__label" for="answerInput">Код с листика:</label>
           <input
             id="answerInput"
             name="answer"
@@ -58,14 +52,17 @@
 
         <div id="messageBox" class="message" role="status" aria-live="polite"></div>
 
-        <button id="nextButton" class="btn btn--success" type="button" hidden>
-          Дальше
-        </button>
       </section>
 
       <section class="controls">
-        <button id="resetButton" class="btn btn--danger btn--corner" type="button">
-          Сброс (для родителей)
+        <button
+          id="resetButton"
+          class="btn btn--danger btn--corner btn--reset"
+          type="button"
+          aria-label="Сброс (для родителей)"
+          title="Сброс (для родителей)"
+        >
+          ⟲
         </button>
       </section>
     </main>
