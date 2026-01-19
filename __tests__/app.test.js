@@ -137,3 +137,107 @@ test("shows an error message on a wrong answer", () => {
   assert.equal(answerInput.classList.contains("card__input--error"), true);
   assert.equal(answerInput["aria-invalid"], "true");
 });
+
+test("enables the final action button on the last screen", () => {
+  const document = createMockDocument();
+  const window = createMockWindow();
+  const storage = {
+    get() {
+      return JSON.stringify({ currentStepIndex: 11, solvedSteps: [] });
+    },
+    set() {},
+    remove() {},
+  };
+  document.elements.checkButton.disabled = true;
+
+  const app = createQuestApp({
+    document,
+    window,
+    storage,
+    timing: { transitionDuration: 0, transitionSwapMs: 0 },
+  });
+
+  app.init();
+
+  assert.equal(document.elements.checkButton.disabled, false);
+});
+
+test("uses the fireworks default export on the final screen", () => {
+  const document = createMockDocument();
+  document.createElement = () => createMockElement();
+  document.body = { appendChild() {} };
+  const storage = {
+    get() {
+      return JSON.stringify({ currentStepIndex: 11, solvedSteps: [] });
+    },
+    set() {},
+    remove() {},
+  };
+  let started = false;
+  const window = {
+    ...createMockWindow(),
+    Fireworks: {
+      default: function Fireworks() {
+        this.start = () => {
+          started = true;
+        };
+        this.stop = () => {};
+      },
+    },
+  };
+
+  const app = createQuestApp({
+    document,
+    window,
+    storage,
+    timing: { transitionDuration: 0, transitionSwapMs: 0 },
+  });
+
+  app.init();
+
+  document.elements.answerForm.dispatchEvent({
+    type: "submit",
+    preventDefault() {},
+  });
+
+  assert.equal(started, true);
+});
+
+test("uses the fireworks global function on the final screen", () => {
+  const document = createMockDocument();
+  document.createElement = () => createMockElement();
+  document.body = { appendChild() {} };
+  const storage = {
+    get() {
+      return JSON.stringify({ currentStepIndex: 11, solvedSteps: [] });
+    },
+    set() {},
+    remove() {},
+  };
+  let started = false;
+  const window = {
+    ...createMockWindow(),
+    fireworks: function Fireworks() {
+      this.start = () => {
+        started = true;
+      };
+      this.stop = () => {};
+    },
+  };
+
+  const app = createQuestApp({
+    document,
+    window,
+    storage,
+    timing: { transitionDuration: 0, transitionSwapMs: 0 },
+  });
+
+  app.init();
+
+  document.elements.answerForm.dispatchEvent({
+    type: "submit",
+    preventDefault() {},
+  });
+
+  assert.equal(started, true);
+});

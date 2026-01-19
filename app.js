@@ -143,6 +143,7 @@ const STEPS = [
 const DEFAULT_STEP_IMAGE = "images/intro-comics.png";
 const TRANSITION_DURATION = 3000;
 const TRANSITION_SWAP_MS = 700;
+const FIREWORKS_DURATION_MS = 6000;
 
 function getDefaultState() {
   return {
@@ -153,6 +154,81 @@ function getDefaultState() {
 
 function normalizeValue(value) {
   return value.trim().toLowerCase();
+}
+
+function createFireworks(document, window) {
+  if (!document?.createElement || !document?.body || !window?.setTimeout) {
+    window?.console?.warn?.(
+      "Fireworks disabled: missing DOM or timer APIs.",
+    );
+    return {
+      launch() {},
+    };
+  }
+  let instance = null;
+  let stopTimeout = null;
+  let activeBursts = 0;
+
+  function getInstance() {
+    if (instance) {
+      return instance;
+    }
+    const candidates = [
+      window?.Fireworks?.default,
+      window?.Fireworks?.Fireworks,
+      window?.Fireworks,
+      window?.fireworks?.default,
+      window?.fireworks?.Fireworks,
+      window?.fireworks,
+    ];
+    const FireworksConstructor = candidates.find(
+      (candidate) => typeof candidate === "function",
+    );
+    if (!FireworksConstructor) {
+      window?.console?.warn?.(
+        "Fireworks disabled: no usable constructor on window.",
+      );
+      return null;
+    }
+    const container = document.createElement("div");
+    container.className = "fireworks";
+    container.setAttribute("aria-hidden", "true");
+    document.body.appendChild(container);
+    instance = new FireworksConstructor(container, {
+      autoresize: true,
+      opacity: 0.7,
+      acceleration: 1.02,
+      friction: 0.99,
+      gravity: 1,
+      particles: 160,
+      trace: 3,
+      explosion: 10,
+    });
+    return instance;
+  }
+
+  function launch() {
+    const fireworks = getInstance();
+    if (!fireworks) {
+      window?.console?.warn?.("Fireworks launch skipped: no instance.");
+      return;
+    }
+    fireworks.start();
+    activeBursts += 1;
+    if (stopTimeout) {
+      window.clearTimeout(stopTimeout);
+    }
+    stopTimeout = window.setTimeout(() => {
+      activeBursts = Math.max(activeBursts - 1, 0);
+      if (activeBursts === 0) {
+        fireworks.stop();
+      }
+    }, FIREWORKS_DURATION_MS);
+  }
+
+  return {
+    launch,
+  };
 }
 
 function createElements(document) {
@@ -207,6 +283,7 @@ function createQuestApp({
   timing = {},
 } = {}) {
   const elements = createElements(document);
+  const fireworks = createFireworks(document, window);
   const transitionDuration = timing.transitionDuration ?? TRANSITION_DURATION;
   const transitionSwapMs = timing.transitionSwapMs ?? TRANSITION_SWAP_MS;
   const storageApi =
@@ -399,6 +476,8 @@ function createQuestApp({
       elements.answerLabel.hidden = true;
       elements.answerInput.hidden = true;
       elements.answerInput.required = false;
+      elements.answerInput.disabled = true;
+      elements.checkButton.disabled = false;
       elements.checkButton.textContent = step.nextLabel || "Дальше";
       setMessage("", null);
     }
@@ -423,6 +502,9 @@ function createQuestApp({
       event.preventDefault();
       const step = currentStep();
       if (step.type !== "task") {
+        if (step.id === "final") {
+          fireworks.launch();
+        }
         advanceStep();
         return;
       }
