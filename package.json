@@ -1,0 +1,8 @@
+{
+  "name": "minecraft-birthday-quest",
+  "version": "1.0.0",
+  "description": "Single-page Minecraft-themed quest for a 7-year-old birthday game.",
+  "scripts": {
+    "test": "node --test"
+  }
+}
