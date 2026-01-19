@@ -143,7 +143,7 @@ const STEPS = [
 const DEFAULT_STEP_IMAGE = "images/intro-comics.png";
 const TRANSITION_DURATION = 3000;
 const TRANSITION_SWAP_MS = 700;
-const FIREWORKS_DURATION_MS = 2500;
+const FIREWORKS_DURATION_MS = 6000;
 
 function getDefaultState() {
   return {
@@ -167,6 +167,7 @@ function createFireworks(document, window) {
   }
   let instance = null;
   let stopTimeout = null;
+  let activeBursts = 0;
 
   function getInstance() {
     if (instance) {
@@ -196,12 +197,12 @@ function createFireworks(document, window) {
     instance = new FireworksConstructor(container, {
       autoresize: true,
       opacity: 0.7,
-      acceleration: 1.04,
-      friction: 0.98,
-      gravity: 1.4,
-      particles: 90,
+      acceleration: 1.02,
+      friction: 0.99,
+      gravity: 1,
+      particles: 160,
       trace: 3,
-      explosion: 6,
+      explosion: 10,
     });
     return instance;
   }
@@ -213,10 +214,16 @@ function createFireworks(document, window) {
       return;
     }
     fireworks.start();
+    activeBursts += 1;
     if (stopTimeout) {
       window.clearTimeout(stopTimeout);
     }
-    stopTimeout = window.setTimeout(() => fireworks.stop(), FIREWORKS_DURATION_MS);
+    stopTimeout = window.setTimeout(() => {
+      activeBursts = Math.max(activeBursts - 1, 0);
+      if (activeBursts === 0) {
+        fireworks.stop();
+      }
+    }, FIREWORKS_DURATION_MS);
   }
 
   return {
