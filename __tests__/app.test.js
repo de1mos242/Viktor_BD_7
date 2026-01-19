@@ -137,3 +137,27 @@ test("shows an error message on a wrong answer", () => {
   assert.equal(answerInput.classList.contains("card__input--error"), true);
   assert.equal(answerInput["aria-invalid"], "true");
 });
+
+test("enables the final action button on the last screen", () => {
+  const document = createMockDocument();
+  const window = createMockWindow();
+  const storage = {
+    get() {
+      return JSON.stringify({ currentStepIndex: 11, solvedSteps: [] });
+    },
+    set() {},
+    remove() {},
+  };
+  document.elements.checkButton.disabled = true;
+
+  const app = createQuestApp({
+    document,
+    window,
+    storage,
+    timing: { transitionDuration: 0, transitionSwapMs: 0 },
+  });
+
+  app.init();
+
+  assert.equal(document.elements.checkButton.disabled, false);
+});

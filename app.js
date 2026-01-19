@@ -452,6 +452,8 @@ function createQuestApp({
       elements.answerLabel.hidden = true;
       elements.answerInput.hidden = true;
       elements.answerInput.required = false;
+      elements.answerInput.disabled = true;
+      elements.checkButton.disabled = false;
       elements.checkButton.textContent = step.nextLabel || "Дальше";
       setMessage("", null);
     }
