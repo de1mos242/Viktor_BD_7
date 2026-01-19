@@ -267,6 +267,12 @@ function createQuestApp({
     }
   }
 
+  function focusInput() {
+    if (typeof elements.answerInput?.focus === "function") {
+      elements.answerInput.focus();
+    }
+  }
+
   function setSuccessState(step) {
     setMessage("Верно!", "success");
     elements.answerInput.classList.remove("card__input--error");
@@ -334,33 +340,9 @@ function createQuestApp({
     elements.answerInput.setAttribute("aria-invalid", "true");
   }
 
-  function renderProgress() {
-    const stepNumber = state.currentStepIndex + 1;
-    const progress = (stepNumber / STEPS.length) * 100;
-    elements.progressFill.style.width = `${progress}%`;
-  }
-
-  if (step.type === "task") {
-    elements.answerForm.hidden = false;
-    elements.answerLabel.hidden = false;
-    elements.answerInput.hidden = false;
-    elements.answerInput.required = true;
-    elements.checkButton.textContent = "Проверить";
-    const solved = state.solvedSteps.includes(step.id);
-    if (solved) {
-      setSuccessState(step);
-    } else {
-      setActiveState();
-    }
-  } else {
-    elements.answerForm.hidden = false;
-    elements.answerLabel.hidden = true;
-    elements.answerInput.hidden = true;
-    elements.answerInput.required = false;
-    elements.answerInput.disabled = true;
-    elements.checkButton.textContent = step.nextLabel || "Дальше";
-    elements.checkButton.disabled = false;
-    setMessage("", null);
+  function setTransitionLock(locked) {
+    elements.checkButton.disabled = locked;
+    elements.answerInput.disabled = locked;
   }
 
   function advanceStep() {
@@ -390,6 +372,14 @@ function createQuestApp({
 
   function renderStep() {
     const step = currentStep();
+    elements.stepTitle.textContent = step.title;
+    if (step.subtitle) {
+      elements.stepSubtitle.textContent = step.subtitle;
+      elements.stepSubtitle.hidden = false;
+    } else {
+      elements.stepSubtitle.textContent = "";
+      elements.stepSubtitle.hidden = true;
+    }
     if (step.type !== "task") {
       if (step.id === "final") {
         launchFirework();
@@ -424,13 +414,13 @@ function createQuestApp({
       elements.answerLabel.hidden = true;
       elements.answerInput.hidden = true;
       elements.answerInput.required = false;
+      elements.answerInput.disabled = true;
       elements.checkButton.textContent = step.nextLabel || "Дальше";
+      elements.checkButton.disabled = false;
       setMessage("", null);
     }
 
-    if (isTransitioning) {
-      setTransitionLock(true);
-    }
+    setTransitionLock(isTransitioning);
   }
 
   function render() {
