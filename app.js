@@ -169,12 +169,16 @@ function createFireworks(document, window) {
     if (instance) {
       return instance;
     }
-    const FireworksConstructor =
-      window?.Fireworks ??
-      window?.Fireworks?.default ??
-      window?.fireworks?.Fireworks ??
-      window?.fireworks?.default;
-    if (typeof FireworksConstructor !== "function") {
+    const candidates = [
+      window?.Fireworks?.default,
+      window?.Fireworks,
+      window?.fireworks?.Fireworks,
+      window?.fireworks?.default,
+    ];
+    const FireworksConstructor = candidates.find(
+      (candidate) => typeof candidate === "function",
+    );
+    if (!FireworksConstructor) {
       return null;
     }
     const container = document.createElement("div");
