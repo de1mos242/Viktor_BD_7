@@ -144,50 +144,6 @@ const DEFAULT_STEP_IMAGE = "images/intro-comics.png";
 const TRANSITION_DURATION = 3000;
 const TRANSITION_SWAP_MS = 700;
 
-const elements = {
-  progressFill: document.getElementById("progressFill"),
-  card: document.getElementById("card"),
-  stepTitle: document.getElementById("stepTitle"),
-  stepSubtitle: document.getElementById("stepSubtitle"),
-  stepPrompt: document.getElementById("stepPrompt"),
-  stepHint: document.getElementById("stepHint"),
-  stepNote: document.getElementById("stepNote"),
-  stepImage: document.getElementById("stepImage"),
-  answerLabel: document.getElementById("answerLabel"),
-  answerForm: document.getElementById("answerForm"),
-  answerInput: document.getElementById("answerInput"),
-  checkButton: document.getElementById("checkButton"),
-  messageBox: document.getElementById("messageBox"),
-  resetButton: document.getElementById("resetButton"),
-};
-
-const storage = {
-  get(key) {
-    try {
-      return localStorage.getItem(key);
-    } catch (error) {
-      return null;
-    }
-  },
-  set(key, value) {
-    try {
-      localStorage.setItem(key, value);
-    } catch (error) {
-      // ignore storage failures (private mode, blocked storage)
-    }
-  },
-  remove(key) {
-    try {
-      localStorage.removeItem(key);
-    } catch (error) {
-      // ignore storage failures
-    }
-  },
-};
-
-let state = getDefaultState();
-let isTransitioning = false;
-
 function getDefaultState() {
   return {
     currentStepIndex: 0,
@@ -199,247 +155,332 @@ function normalizeValue(value) {
   return value.trim().toLowerCase();
 }
 
-function saveState() {
-  storage.set(STORAGE_KEY, JSON.stringify(state));
+function createElements(document) {
+  return {
+    progressFill: document.getElementById("progressFill"),
+    card: document.getElementById("card"),
+    stepTitle: document.getElementById("stepTitle"),
+    stepSubtitle: document.getElementById("stepSubtitle"),
+    stepPrompt: document.getElementById("stepPrompt"),
+    stepHint: document.getElementById("stepHint"),
+    stepNote: document.getElementById("stepNote"),
+    stepImage: document.getElementById("stepImage"),
+    answerLabel: document.getElementById("answerLabel"),
+    answerForm: document.getElementById("answerForm"),
+    answerInput: document.getElementById("answerInput"),
+    checkButton: document.getElementById("checkButton"),
+    messageBox: document.getElementById("messageBox"),
+    resetButton: document.getElementById("resetButton"),
+  };
 }
 
-function loadState() {
-  const raw = storage.get(STORAGE_KEY);
-  if (!raw) {
-    return;
+function createStorage(localStorage) {
+  return {
+    get(key) {
+      try {
+        return localStorage.getItem(key);
+      } catch (error) {
+        return null;
+      }
+    },
+    set(key, value) {
+      try {
+        localStorage.setItem(key, value);
+      } catch (error) {
+        // ignore storage failures (private mode, blocked storage)
+      }
+    },
+    remove(key) {
+      try {
+        localStorage.removeItem(key);
+      } catch (error) {
+        // ignore storage failures
+      }
+    },
+  };
+}
+
+function createQuestApp({
+  document = globalThis.document,
+  window = globalThis.window,
+  storage,
+  timing = {},
+} = {}) {
+  const elements = createElements(document);
+  const transitionDuration = timing.transitionDuration ?? TRANSITION_DURATION;
+  const transitionSwapMs = timing.transitionSwapMs ?? TRANSITION_SWAP_MS;
+  const storageApi =
+    storage ??
+    createStorage(window?.localStorage ?? {
+      getItem() {
+        return null;
+      },
+      setItem() {},
+      removeItem() {},
+    });
+  let state = getDefaultState();
+  let isTransitioning = false;
+
+  function saveState() {
+    storageApi.set(STORAGE_KEY, JSON.stringify(state));
   }
-  try {
-    const parsed = JSON.parse(raw);
-    state = {
-      ...getDefaultState(),
-      ...parsed,
-    };
-  } catch (error) {
+
+  function loadState() {
+    const raw = storageApi.get(STORAGE_KEY);
+    if (!raw) {
+      return;
+    }
+    try {
+      const parsed = JSON.parse(raw);
+      state = {
+        ...getDefaultState(),
+        ...parsed,
+      };
+    } catch (error) {
+      state = getDefaultState();
+    }
+  }
+
+  function resetProgress() {
+    storageApi.remove(STORAGE_KEY);
     state = getDefaultState();
-  }
-}
-
-function resetProgress() {
-  storage.remove(STORAGE_KEY);
-  state = getDefaultState();
-  render();
-}
-
-function clampStepIndex() {
-  if (state.currentStepIndex < 0) {
-    state.currentStepIndex = 0;
-  }
-  if (state.currentStepIndex >= STEPS.length) {
-    state.currentStepIndex = STEPS.length - 1;
-  }
-}
-
-function setMessage(text, type) {
-  elements.messageBox.textContent = text;
-  elements.messageBox.className = "message";
-  if (type) {
-    elements.messageBox.classList.add(`message--${type}`);
-  }
-  if (text) {
-    elements.messageBox.classList.add("message--visible");
-  }
-}
-
-function setSuccessState(step) {
-  setMessage("Верно!", "success");
-  elements.answerInput.classList.remove("card__input--error");
-  elements.answerInput.removeAttribute("aria-invalid");
-  elements.answerInput.disabled = true;
-  elements.checkButton.disabled = true;
-}
-
-function setActiveState() {
-  elements.answerInput.disabled = false;
-  elements.checkButton.disabled = false;
-  elements.answerInput.value = "";
-  elements.answerInput.classList.remove("card__input--error");
-  elements.answerInput.removeAttribute("aria-invalid");
-  setMessage("", null);
-  focusInput();
-}
-
-function focusInput() {
-  if (isTransitioning) {
-    return;
-  }
-  setTimeout(() => elements.answerInput.focus(), 0);
-}
-
-function matchesAnswer(value, step) {
-  const normalized = normalizeValue(value);
-  return step.answers.some(
-    (answer) => normalized === normalizeValue(String(answer)),
-  );
-}
-
-function markSolved(step) {
-  if (!state.solvedSteps.includes(step.id)) {
-    state.solvedSteps.push(step.id);
-  }
-  saveState();
-}
-
-function handleCorrect(step) {
-  markSolved(step);
-  setSuccessState(step);
-  advanceStep();
-}
-
-function handleWrong(step) {
-  saveState();
-  setMessage("Код неправильный.", "error");
-  elements.answerInput.classList.add("card__input--error");
-  elements.answerInput.setAttribute("aria-invalid", "true");
-}
-
-function renderProgress() {
-  const stepNumber = state.currentStepIndex + 1;
-  const progress = (stepNumber / STEPS.length) * 100;
-  elements.progressFill.style.width = `${progress}%`;
-}
-
-function setTransitionLock(active) {
-  elements.answerInput.disabled = active;
-  elements.checkButton.disabled = active;
-}
-
-function advanceStep() {
-  if (state.currentStepIndex >= STEPS.length - 1) {
-    return;
-  }
-  if (isTransitioning) {
-    return;
-  }
-  isTransitioning = true;
-  elements.card?.classList.remove("card--transition");
-  void elements.card?.offsetWidth;
-  elements.card?.classList.add("card--transition");
-  setTransitionLock(true);
-  const nextIndex = Math.min(state.currentStepIndex + 1, STEPS.length - 1);
-  window.setTimeout(() => {
-    state.currentStepIndex = nextIndex;
-    saveState();
     render();
-  }, TRANSITION_SWAP_MS);
-  window.setTimeout(() => {
-    elements.card?.classList.remove("card--transition");
-    isTransitioning = false;
-    renderStep();
-  }, TRANSITION_DURATION);
-}
-
-function renderStep() {
-  const step = currentStep();
-  elements.stepTitle.textContent = step.title;
-  elements.stepSubtitle.textContent = step.subtitle || "";
-  elements.stepSubtitle.hidden = !step.subtitle;
-  elements.stepPrompt.textContent = step.prompt;
-
-  elements.stepImage.src = step.image || DEFAULT_STEP_IMAGE;
-  elements.stepImage.alt = step.title;
-  elements.stepImage.hidden = false;
-
-  if (step.hint) {
-    elements.stepHint.textContent = `Подсказка: ${step.hint}`;
-    elements.stepHint.hidden = false;
-  } else {
-    elements.stepHint.textContent = "";
-    elements.stepHint.hidden = true;
   }
 
-  if (step.note) {
-    elements.stepNote.textContent = step.note;
-    elements.stepNote.hidden = false;
-  } else {
-    elements.stepNote.textContent = "";
-    elements.stepNote.hidden = true;
-  }
-
-  if (step.type === "task") {
-    elements.answerForm.hidden = false;
-    elements.answerLabel.hidden = false;
-    elements.answerInput.hidden = false;
-    elements.answerInput.required = true;
-    elements.checkButton.textContent = "Проверить";
-    const solved = state.solvedSteps.includes(step.id);
-    if (solved) {
-      setSuccessState(step);
-    } else {
-      setActiveState();
+  function clampStepIndex() {
+    if (state.currentStepIndex < 0) {
+      state.currentStepIndex = 0;
     }
-  } else {
-    elements.answerForm.hidden = false;
-    elements.answerLabel.hidden = true;
-    elements.answerInput.hidden = true;
-    elements.answerInput.required = false;
-    elements.checkButton.textContent = step.nextLabel || "Дальше";
+    if (state.currentStepIndex >= STEPS.length) {
+      state.currentStepIndex = STEPS.length - 1;
+    }
+  }
+
+  function setMessage(text, type) {
+    elements.messageBox.textContent = text;
+    elements.messageBox.className = "message";
+    if (type) {
+      elements.messageBox.classList.add(`message--${type}`);
+    }
+    if (text) {
+      elements.messageBox.classList.add("message--visible");
+    }
+  }
+
+  function setSuccessState(step) {
+    setMessage("Верно!", "success");
+    elements.answerInput.classList.remove("card__input--error");
+    elements.answerInput.removeAttribute("aria-invalid");
+    elements.answerInput.disabled = true;
+    elements.checkButton.disabled = true;
+  }
+
+  function setActiveState() {
+    elements.answerInput.disabled = false;
+    elements.checkButton.disabled = false;
+    elements.answerInput.value = "";
+    elements.answerInput.classList.remove("card__input--error");
+    elements.answerInput.removeAttribute("aria-invalid");
     setMessage("", null);
+    focusInput();
   }
 
-  if (isTransitioning) {
+  function focusInput() {
+    if (isTransitioning) {
+      return;
+    }
+    window.setTimeout(() => elements.answerInput.focus(), 0);
+  }
+
+  function matchesAnswer(value, step) {
+    const normalized = normalizeValue(value);
+    return step.answers.some(
+      (answer) => normalized === normalizeValue(String(answer)),
+    );
+  }
+
+  function markSolved(step) {
+    if (!state.solvedSteps.includes(step.id)) {
+      state.solvedSteps.push(step.id);
+    }
+    saveState();
+  }
+
+  function handleCorrect(step) {
+    markSolved(step);
+    setSuccessState(step);
+    advanceStep();
+  }
+
+  function handleWrong(step) {
+    saveState();
+    setMessage("Код неправильный.", "error");
+    elements.answerInput.classList.add("card__input--error");
+    elements.answerInput.setAttribute("aria-invalid", "true");
+  }
+
+  function renderProgress() {
+    const stepNumber = state.currentStepIndex + 1;
+    const progress = (stepNumber / STEPS.length) * 100;
+    elements.progressFill.style.width = `${progress}%`;
+  }
+
+  function setTransitionLock(active) {
+    elements.answerInput.disabled = active;
+    elements.checkButton.disabled = active;
+  }
+
+  function advanceStep() {
+    if (state.currentStepIndex >= STEPS.length - 1) {
+      return;
+    }
+    if (isTransitioning) {
+      return;
+    }
+    isTransitioning = true;
+    elements.card?.classList.remove("card--transition");
+    void elements.card?.offsetWidth;
+    elements.card?.classList.add("card--transition");
     setTransitionLock(true);
+    const nextIndex = Math.min(state.currentStepIndex + 1, STEPS.length - 1);
+    window.setTimeout(() => {
+      state.currentStepIndex = nextIndex;
+      saveState();
+      render();
+    }, transitionSwapMs);
+    window.setTimeout(() => {
+      elements.card?.classList.remove("card--transition");
+      isTransitioning = false;
+      renderStep();
+    }, transitionDuration);
   }
-}
 
-function render() {
-  clampStepIndex();
-  renderProgress();
-  renderStep();
-}
-
-function currentStep() {
-  return STEPS[state.currentStepIndex];
-}
-
-function setupEvents() {
-  elements.answerForm.addEventListener("submit", (event) => {
-    event.preventDefault();
+  function renderStep() {
     const step = currentStep();
-    if (step.type !== "task") {
-      advanceStep();
-      return;
-    }
-    if (state.solvedSteps.includes(step.id)) {
-      return;
-    }
-    if (matchesAnswer(elements.answerInput.value, step)) {
-      handleCorrect(step);
-    } else {
-      handleWrong(step);
-    }
-  });
+    elements.stepTitle.textContent = step.title;
+    elements.stepSubtitle.textContent = step.subtitle || "";
+    elements.stepSubtitle.hidden = !step.subtitle;
+    elements.stepPrompt.textContent = step.prompt;
 
-  elements.resetButton.addEventListener("click", () => {
-    const pin = window.prompt("Введите PIN для сброса:");
-    if (pin === null) {
-      return;
-    }
-    if (pin.trim() === PARENT_PIN) {
-      resetProgress();
-    } else {
-      window.alert("Неверный PIN.");
-    }
-  });
-}
+    elements.stepImage.src = step.image || DEFAULT_STEP_IMAGE;
+    elements.stepImage.alt = step.title;
+    elements.stepImage.hidden = false;
 
-function handleResetQuery() {
-  const params = new URLSearchParams(window.location.search);
-  if (params.get("reset") === "1") {
-    resetProgress();
+    if (step.hint) {
+      elements.stepHint.textContent = `Подсказка: ${step.hint}`;
+      elements.stepHint.hidden = false;
+    } else {
+      elements.stepHint.textContent = "";
+      elements.stepHint.hidden = true;
+    }
+
+    if (step.note) {
+      elements.stepNote.textContent = step.note;
+      elements.stepNote.hidden = false;
+    } else {
+      elements.stepNote.textContent = "";
+      elements.stepNote.hidden = true;
+    }
+
+    if (step.type === "task") {
+      elements.answerForm.hidden = false;
+      elements.answerLabel.hidden = false;
+      elements.answerInput.hidden = false;
+      elements.answerInput.required = true;
+      elements.checkButton.textContent = "Проверить";
+      const solved = state.solvedSteps.includes(step.id);
+      if (solved) {
+        setSuccessState(step);
+      } else {
+        setActiveState();
+      }
+    } else {
+      elements.answerForm.hidden = false;
+      elements.answerLabel.hidden = true;
+      elements.answerInput.hidden = true;
+      elements.answerInput.required = false;
+      elements.checkButton.textContent = step.nextLabel || "Дальше";
+      setMessage("", null);
+    }
+
+    if (isTransitioning) {
+      setTransitionLock(true);
+    }
   }
+
+  function render() {
+    clampStepIndex();
+    renderProgress();
+    renderStep();
+  }
+
+  function currentStep() {
+    return STEPS[state.currentStepIndex];
+  }
+
+  function setupEvents() {
+    elements.answerForm.addEventListener("submit", (event) => {
+      event.preventDefault();
+      const step = currentStep();
+      if (step.type !== "task") {
+        advanceStep();
+        return;
+      }
+      if (state.solvedSteps.includes(step.id)) {
+        return;
+      }
+      if (matchesAnswer(elements.answerInput.value, step)) {
+        handleCorrect(step);
+      } else {
+        handleWrong(step);
+      }
+    });
+
+    elements.resetButton.addEventListener("click", () => {
+      const pin = window.prompt("Введите PIN для сброса:");
+      if (pin === null) {
+        return;
+      }
+      if (pin.trim() === PARENT_PIN) {
+        resetProgress();
+      } else {
+        window.alert("Неверный PIN.");
+      }
+    });
+  }
+
+  function handleResetQuery() {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("reset") === "1") {
+      resetProgress();
+    }
+  }
+
+  function init() {
+    loadState();
+    clampStepIndex();
+    handleResetQuery();
+    setupEvents();
+    render();
+  }
+
+  return {
+    init,
+    getState() {
+      return { ...state };
+    },
+    elements,
+  };
 }
 
-function init() {
-  loadState();
-  clampStepIndex();
-  handleResetQuery();
-  setupEvents();
-  render();
+if (typeof window !== "undefined" && typeof document !== "undefined") {
+  const app = createQuestApp();
+  app.init();
 }
 
-init();
+if (typeof module !== "undefined") {
+  module.exports = {
+    createQuestApp,
+    normalizeValue,
+  };
+}
