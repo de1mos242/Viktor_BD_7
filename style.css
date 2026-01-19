@@ -1,18 +1,16 @@
-@import url("https://fonts.googleapis.com/css2?family=Pirata+One&family=Nunito:wght@400;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Press+Start+2P&display=swap");
 
 :root {
-  color-scheme: dark;
+  color-scheme: light;
   font-family: "Nunito", "Segoe UI", sans-serif;
-  --bg: #0b1020;
-  --card: #1e1a2b;
-  --accent: #ffcc4d;
-  --accent-2: #66d7ee;
-  --text: #f9f1d5;
-  --muted: #d1c4a7;
-  --success: #39d98a;
-  --danger: #ff6b6b;
-  --wood: #3d2b1f;
-  --sand: #e3c57a;
+  --bg: #0f1f14;
+  --panel: #1a2f22;
+  --accent: #4caf50;
+  --accent-2: #8bc34a;
+  --text: #f7f7f2;
+  --muted: #d0dfc9;
+  --success: #5ad48a;
+  --danger: #ff8a80;
 }
 
 * {
@@ -23,17 +21,14 @@ body {
   margin: 0;
   min-height: 100vh;
   background:
-    linear-gradient(180deg, rgba(11, 16, 32, 0.75), rgba(11, 16, 32, 0.95)),
-    url("https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1600&q=80")
-      center/cover no-repeat,
-    radial-gradient(circle at top, #2a3b6b, #0f1a36 50%, var(--bg)),
     repeating-linear-gradient(
       45deg,
-      rgba(255, 255, 255, 0.03),
-      rgba(255, 255, 255, 0.03) 10px,
-      rgba(0, 0, 0, 0.03) 10px,
-      rgba(0, 0, 0, 0.03) 20px
-    );
+      rgba(255, 255, 255, 0.04),
+      rgba(255, 255, 255, 0.04) 12px,
+      rgba(0, 0, 0, 0.04) 12px,
+      rgba(0, 0, 0, 0.04) 24px
+    ),
+    radial-gradient(circle at top, #3b6b3b, #122015 65%, var(--bg));
   color: var(--text);
 }
 
@@ -49,17 +44,23 @@ body {
   margin-bottom: 20px;
 }
 
+.app__eyebrow {
+  margin: 0 0 8px;
+  font-weight: 700;
+  color: var(--accent-2);
+}
+
 .app__header h1 {
   margin: 0 0 8px;
-  font-family: "Pirata One", "Nunito", serif;
-  font-size: clamp(2.4rem, 4vw, 3.4rem);
+  font-family: "Press Start 2P", "Nunito", sans-serif;
+  font-size: clamp(1.8rem, 4vw, 2.6rem);
   text-shadow: 0 6px 16px rgba(0, 0, 0, 0.5);
 }
 
 .app__subtitle {
   margin: 0;
   color: var(--muted);
-  font-size: 1.1rem;
+  font-size: 1.05rem;
 }
 
 .progress {
@@ -68,13 +69,6 @@ body {
   background: rgba(0, 0, 0, 0.35);
   border-radius: 16px;
   border: 1px solid rgba(255, 255, 255, 0.08);
-}
-
-.progress__row {
-  display: flex;
-  justify-content: space-between;
-  font-size: 1rem;
-  margin-bottom: 12px;
 }
 
 .progress__bar {
@@ -92,42 +86,18 @@ body {
   transition: width 0.4s ease;
 }
 
-.tokens {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  background: rgba(0, 0, 0, 0.4);
-  padding: 10px 16px;
-  border-radius: 12px;
-  margin-bottom: 16px;
-  font-size: 1rem;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-}
-
-.tokens__label {
-  color: var(--accent);
-  font-weight: 700;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.tokens__label::before {
-  content: "💰";
-}
-
 .card {
-  background: linear-gradient(180deg, rgba(61, 43, 31, 0.9), rgba(30, 26, 43, 0.95));
+  background: linear-gradient(180deg, rgba(24, 44, 31, 0.96), rgba(12, 24, 17, 0.98));
   border-radius: 24px;
   padding: 24px;
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.35);
-  border: 2px solid rgba(255, 204, 77, 0.15);
+  border: 2px solid rgba(76, 175, 80, 0.3);
   position: relative;
   overflow: hidden;
 }
 
 .card::before {
-  content: "🧰";
+  content: "⛏️";
   position: absolute;
   top: 14px;
   right: 16px;
@@ -149,20 +119,50 @@ body {
   color: var(--muted);
 }
 
+.card__image {
+  width: 100%;
+  max-height: 280px;
+  object-fit: contain;
+  border-radius: 18px;
+  margin-bottom: 16px;
+  background: rgba(0, 0, 0, 0.2);
+  padding: 8px;
+}
+
 .card__prompt {
   font-size: 1.2rem;
   line-height: 1.5;
-  margin-bottom: 20px;
-  position: relative;
+  margin-bottom: 16px;
 }
 
-.card__prompt::after {
-  content: "🧭";
-  position: absolute;
-  right: 0;
-  top: -6px;
-  font-size: 1.5rem;
-  opacity: 0.7;
+.card__note {
+  margin: 0 0 16px;
+  padding: 12px 14px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--muted);
+  font-size: 1rem;
+}
+
+.card__note--hint {
+  border: 1px dashed rgba(255, 255, 255, 0.2);
+  color: var(--text);
+}
+
+.card--advance {
+  animation: cardAdvance 0.4s ease;
+}
+
+@keyframes cardAdvance {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.01);
+  }
+  100% {
+    transform: scale(1);
+  }
 }
 
 .card__form {
@@ -171,7 +171,7 @@ body {
 }
 
 .card__label {
-  font-weight: 600;
+  font-weight: 700;
   font-size: 1rem;
 }
 
@@ -181,20 +181,14 @@ body {
   border-radius: 12px;
   border: 2px solid transparent;
   font-size: 1.2rem;
-  background: rgba(15, 24, 44, 0.8);
+  background: rgba(15, 24, 19, 0.8);
   color: var(--text);
 }
 
 .card__input:focus {
   outline: none;
   border-color: var(--accent);
-  box-shadow: 0 0 0 3px rgba(126, 249, 255, 0.25);
-}
-
-.card__buttons {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
+  box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.3);
 }
 
 .btn {
@@ -213,37 +207,19 @@ body {
 }
 
 .btn--primary {
-  background: linear-gradient(120deg, #ffcc4d, #f0a202);
-  color: #3a2500;
-  box-shadow: 0 8px 20px rgba(240, 162, 2, 0.4);
-}
-
-.btn--ghost {
-  background: transparent;
-  color: var(--text);
-  border: 2px dashed rgba(255, 255, 255, 0.4);
-}
-
-.btn--ghost:disabled {
-  opacity: 0.4;
-  cursor: not-allowed;
-}
-
-.btn--success {
-  margin-top: 18px;
-  width: 100%;
-  background: linear-gradient(120deg, #39d98a, #2e9c62);
-  color: #032216;
+  background: linear-gradient(120deg, #7ddc74, #4caf50);
+  color: #0f1f14;
+  box-shadow: 0 8px 20px rgba(76, 175, 80, 0.4);
 }
 
 .btn--danger {
-  background: linear-gradient(120deg, #ff6b6b, #c44545);
+  background: linear-gradient(120deg, #ff8a80, #ff5252);
   color: #2b0d0d;
 }
 
 .btn--corner {
-  padding: 8px 12px;
-  font-size: 0.85rem;
+  padding: 6px 8px;
+  font-size: 0.75rem;
   opacity: 0.55;
 }
 
@@ -266,17 +242,12 @@ body {
 
 .message--error {
   border-color: var(--danger);
-  background: rgba(255, 107, 107, 0.15);
+  background: rgba(255, 138, 128, 0.2);
 }
 
 .message--success {
   border-color: var(--success);
-  background: rgba(57, 217, 138, 0.18);
-}
-
-.message--hint {
-  border-color: var(--accent-2);
-  background: rgba(255, 209, 102, 0.15);
+  background: rgba(90, 212, 138, 0.2);
 }
 
 .controls {
@@ -287,51 +258,25 @@ body {
   max-width: calc(100% - 24px);
 }
 
-.controls .btn--corner::before {
-  content: "🦜 ";
-}
-
 .btn--corner {
   max-width: 100%;
   white-space: normal;
   text-align: left;
 }
 
-.confetti {
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  overflow: hidden;
-  z-index: 100;
-}
-
-.confetti-piece {
-  position: absolute;
-  width: 10px;
-  height: 18px;
-  opacity: 0.8;
-  animation: fall 3.5s linear forwards;
-}
-
-@keyframes fall {
-  0% {
-    transform: translateY(-20vh) rotate(0deg);
-  }
-  100% {
-    transform: translateY(110vh) rotate(360deg);
-  }
+.btn--reset {
+  border-radius: 999px;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
 }
 
 @media (max-width: 600px) {
   .card {
     padding: 20px;
-  }
-
-  .card__buttons {
-    flex-direction: column;
-  }
-
-  .btn {
-    width: 100%;
   }
 }
