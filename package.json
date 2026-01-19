@@ -3,12 +3,6 @@
   "version": "1.0.0",
   "description": "Single-page Minecraft-themed quest for a 7-year-old birthday game.",
   "scripts": {
-    "test": "jest"
-  },
-  "devDependencies": {
-    "jest": "^29.7.0"
-  },
-  "jest": {
-    "testEnvironment": "jsdom"
+    "test": "node --test"
   }
 }
