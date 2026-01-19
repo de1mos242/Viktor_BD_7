@@ -159,7 +159,6 @@ const elements = {
   checkButton: document.getElementById("checkButton"),
   messageBox: document.getElementById("messageBox"),
   resetButton: document.getElementById("resetButton"),
-  fireworks: document.getElementById("fireworks"),
 };
 
 const storage = {
@@ -299,36 +298,19 @@ function handleWrong(step) {
 }
 
 function launchFirework() {
-  if (!elements.fireworks) {
+  if (typeof window.confetti !== "function") {
     return;
   }
-  const firework = document.createElement("div");
-  firework.className = "firework";
-  const hue = Math.floor(Math.random() * 360);
-  const x = Math.random() * window.innerWidth * 0.8 + window.innerWidth * 0.1;
-  const y = Math.random() * window.innerHeight * 0.5 + window.innerHeight * 0.1;
-  firework.style.left = `${x}px`;
-  firework.style.top = `${y}px`;
-  firework.style.setProperty("--hue", hue);
-
-  const particleCount = 16;
-  for (let i = 0; i < particleCount; i += 1) {
-    const particle = document.createElement("span");
-    particle.className = "firework__particle";
-    const angle = (Math.PI * 2 * i) / particleCount;
-    const distance = 80 + Math.random() * 60;
-    const dx = Math.cos(angle) * distance;
-    const dy = Math.sin(angle) * distance;
-    particle.style.setProperty("--dx", `${dx}px`);
-    particle.style.setProperty("--dy", `${dy}px`);
-    particle.style.setProperty("--delay", `${Math.random() * 0.1}s`);
-    firework.appendChild(particle);
-  }
-
-  elements.fireworks.appendChild(firework);
-  window.setTimeout(() => {
-    firework.remove();
-  }, 1200);
+  const originX = Math.random() * 0.6 + 0.2;
+  const originY = Math.random() * 0.4 + 0.1;
+  window.confetti({
+    particleCount: 80,
+    spread: 70,
+    startVelocity: 40,
+    gravity: 1.1,
+    scalar: 0.9,
+    origin: { x: originX, y: originY },
+  });
 }
 
 function renderProgress() {
