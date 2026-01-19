@@ -423,6 +423,12 @@ function createQuestApp({
       event.preventDefault();
       const step = currentStep();
       if (step.type !== "task") {
+        if (step.id === "final") {
+          window.party?.confetti(elements.checkButton, {
+            count: 120,
+            spread: 60,
+          });
+        }
         advanceStep();
         return;
       }
