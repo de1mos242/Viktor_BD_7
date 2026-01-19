@@ -143,6 +143,7 @@ const STEPS = [
 const DEFAULT_STEP_IMAGE = "images/intro-comics.png";
 const TRANSITION_DURATION = 3000;
 const TRANSITION_SWAP_MS = 700;
+const FIREWORKS_DURATION_MS = 2500;
 
 function getDefaultState() {
   return {
@@ -153,6 +154,57 @@ function getDefaultState() {
 
 function normalizeValue(value) {
   return value.trim().toLowerCase();
+}
+
+function createFireworks(document, window) {
+  if (!document?.createElement || !document?.body || !window?.setTimeout) {
+    return {
+      launch() {},
+    };
+  }
+  let instance = null;
+  let stopTimeout = null;
+
+  function getInstance() {
+    if (instance) {
+      return instance;
+    }
+    const FireworksConstructor = window?.Fireworks;
+    if (!FireworksConstructor) {
+      return null;
+    }
+    const container = document.createElement("div");
+    container.className = "fireworks";
+    container.setAttribute("aria-hidden", "true");
+    document.body.appendChild(container);
+    instance = new FireworksConstructor(container, {
+      autoresize: true,
+      opacity: 0.7,
+      acceleration: 1.04,
+      friction: 0.98,
+      gravity: 1.4,
+      particles: 90,
+      trace: 3,
+      explosion: 6,
+    });
+    return instance;
+  }
+
+  function launch() {
+    const fireworks = getInstance();
+    if (!fireworks) {
+      return;
+    }
+    fireworks.start();
+    if (stopTimeout) {
+      window.clearTimeout(stopTimeout);
+    }
+    stopTimeout = window.setTimeout(() => fireworks.stop(), FIREWORKS_DURATION_MS);
+  }
+
+  return {
+    launch,
+  };
 }
 
 function createElements(document) {
@@ -207,6 +259,7 @@ function createQuestApp({
   timing = {},
 } = {}) {
   const elements = createElements(document);
+  const fireworks = createFireworks(document, window);
   const transitionDuration = timing.transitionDuration ?? TRANSITION_DURATION;
   const transitionSwapMs = timing.transitionSwapMs ?? TRANSITION_SWAP_MS;
   const storageApi =
@@ -424,10 +477,7 @@ function createQuestApp({
       const step = currentStep();
       if (step.type !== "task") {
         if (step.id === "final") {
-          window.party?.confetti(elements.checkButton, {
-            count: 120,
-            spread: 60,
-          });
+          fireworks.launch();
         }
         advanceStep();
         return;
