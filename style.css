@@ -146,6 +146,11 @@ body {
   box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.3);
 }
 
+.card__input--error {
+  border-color: var(--danger);
+  box-shadow: 0 0 0 3px rgba(255, 138, 128, 0.35);
+}
+
 .btn {
   padding: 14px 20px;
   border-radius: 14px;
@@ -185,6 +190,16 @@ body {
 
 .message {
   display: none;
+  border: 2px solid transparent;
+  border-radius: 12px;
+  padding: 10px 14px;
+  font-weight: 700;
+  text-align: center;
+  margin-top: 12px;
+}
+
+.message--visible {
+  display: block;
 }
 
 .message--error {
