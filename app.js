@@ -285,11 +285,26 @@ function createQuestApp({
     focusInput();
   }
 
-  function focusInput() {
-    if (isTransitioning) {
+  function launchFirework() {
+    if (typeof window.confetti !== "function") {
       return;
     }
-    window.setTimeout(() => elements.answerInput.focus(), 0);
+    const originX = Math.random() * 0.6 + 0.2;
+    const originY = Math.random() * 0.4 + 0.1;
+    window.confetti({
+      particleCount: 80,
+      spread: 70,
+      startVelocity: 40,
+      gravity: 1.1,
+      scalar: 0.9,
+      origin: { x: originX, y: originY },
+    });
+  }
+
+  function renderProgress() {
+    const stepNumber = state.currentStepIndex + 1;
+    const progress = (stepNumber / STEPS.length) * 100;
+    elements.progressFill.style.width = `${progress}%`;
   }
 
   function matchesAnswer(value, step) {
@@ -325,9 +340,27 @@ function createQuestApp({
     elements.progressFill.style.width = `${progress}%`;
   }
 
-  function setTransitionLock(active) {
-    elements.answerInput.disabled = active;
-    elements.checkButton.disabled = active;
+  if (step.type === "task") {
+    elements.answerForm.hidden = false;
+    elements.answerLabel.hidden = false;
+    elements.answerInput.hidden = false;
+    elements.answerInput.required = true;
+    elements.checkButton.textContent = "Проверить";
+    const solved = state.solvedSteps.includes(step.id);
+    if (solved) {
+      setSuccessState(step);
+    } else {
+      setActiveState();
+    }
+  } else {
+    elements.answerForm.hidden = false;
+    elements.answerLabel.hidden = true;
+    elements.answerInput.hidden = true;
+    elements.answerInput.required = false;
+    elements.answerInput.disabled = true;
+    elements.checkButton.textContent = step.nextLabel || "Дальше";
+    elements.checkButton.disabled = false;
+    setMessage("", null);
   }
 
   function advanceStep() {
@@ -357,21 +390,13 @@ function createQuestApp({
 
   function renderStep() {
     const step = currentStep();
-    elements.stepTitle.textContent = step.title;
-    elements.stepSubtitle.textContent = step.subtitle || "";
-    elements.stepSubtitle.hidden = !step.subtitle;
-    elements.stepPrompt.textContent = step.prompt;
-
-    elements.stepImage.src = step.image || DEFAULT_STEP_IMAGE;
-    elements.stepImage.alt = step.title;
-    elements.stepImage.hidden = false;
-
-    if (step.hint) {
-      elements.stepHint.textContent = `Подсказка: ${step.hint}`;
-      elements.stepHint.hidden = false;
-    } else {
-      elements.stepHint.textContent = "";
-      elements.stepHint.hidden = true;
+    if (step.type !== "task") {
+      if (step.id === "final") {
+        launchFirework();
+      } else {
+        advanceStep();
+      }
+      return;
     }
 
     if (step.note) {
