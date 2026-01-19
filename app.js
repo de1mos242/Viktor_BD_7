@@ -375,6 +375,9 @@ function createQuestApp({
     if (!step) {
       return;
     }
+    const imageSrc = step.image || DEFAULT_STEP_IMAGE;
+    elements.stepImage.src = imageSrc;
+    elements.stepImage.alt = step.title;
     elements.stepTitle.textContent = step.title;
     if (step.subtitle) {
       elements.stepSubtitle.textContent = step.subtitle;
