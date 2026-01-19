@@ -169,8 +169,12 @@ function createFireworks(document, window) {
     if (instance) {
       return instance;
     }
-    const FireworksConstructor = window?.Fireworks;
-    if (!FireworksConstructor) {
+    const FireworksConstructor =
+      window?.Fireworks ??
+      window?.Fireworks?.default ??
+      window?.fireworks?.Fireworks ??
+      window?.fireworks?.default;
+    if (typeof FireworksConstructor !== "function") {
       return null;
     }
     const container = document.createElement("div");
