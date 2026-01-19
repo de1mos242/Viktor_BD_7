@@ -171,9 +171,11 @@ function createFireworks(document, window) {
     }
     const candidates = [
       window?.Fireworks?.default,
+      window?.Fireworks?.Fireworks,
       window?.Fireworks,
-      window?.fireworks?.Fireworks,
       window?.fireworks?.default,
+      window?.fireworks?.Fireworks,
+      window?.fireworks,
     ];
     const FireworksConstructor = candidates.find(
       (candidate) => typeof candidate === "function",
