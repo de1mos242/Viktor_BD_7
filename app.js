@@ -117,26 +117,6 @@ const TASKS = [
 ];
 
 const STEPS = [
-  {
-    id: "intro",
-    type: "info",
-    title: "Крипер спрятал подарок!",
-    subtitle: "Собираем ингредиенты",
-    prompt:
-      "Найди 9 ингредиентов по подсказкам. За каждый ингредиент есть код. Вводи код сюда!",
-    image: "images/intro-comics.png",
-    nextLabel: "Начать",
-  },
-  {
-    id: "instructions",
-    type: "info",
-    title: "Где искать ингредиенты",
-    subtitle: "Смотри на картинки",
-    prompt:
-      "Подсказки спрятаны рядом с ингредиентами. Нашёл листик — введи код.",
-    image: "images/intro-comics.png",
-    nextLabel: "Поехали",
-  },
   ...TASKS.map((task) => ({
     id: task.id,
     type: "task",
