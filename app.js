@@ -158,6 +158,9 @@ function normalizeValue(value) {
 
 function createFireworks(document, window) {
   if (!document?.createElement || !document?.body || !window?.setTimeout) {
+    window?.console?.warn?.(
+      "Fireworks disabled: missing DOM or timer APIs.",
+    );
     return {
       launch() {},
     };
@@ -181,6 +184,9 @@ function createFireworks(document, window) {
       (candidate) => typeof candidate === "function",
     );
     if (!FireworksConstructor) {
+      window?.console?.warn?.(
+        "Fireworks disabled: no usable constructor on window.",
+      );
       return null;
     }
     const container = document.createElement("div");
@@ -203,6 +209,7 @@ function createFireworks(document, window) {
   function launch() {
     const fireworks = getInstance();
     if (!fireworks) {
+      window?.console?.warn?.("Fireworks launch skipped: no instance.");
       return;
     }
     fireworks.start();
