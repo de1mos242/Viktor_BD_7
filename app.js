@@ -141,6 +141,8 @@ const STEPS = [
 ];
 
 const DEFAULT_STEP_IMAGE = "images/intro-comics.png";
+const TRANSITION_DURATION = 3000;
+const TRANSITION_SWAP_MS = 700;
 
 const elements = {
   progressFill: document.getElementById("progressFill"),
@@ -184,6 +186,7 @@ const storage = {
 };
 
 let state = getDefaultState();
+let isTransitioning = false;
 
 function getDefaultState() {
   return {
@@ -261,6 +264,9 @@ function setActiveState() {
 }
 
 function focusInput() {
+  if (isTransitioning) {
+    return;
+  }
   setTimeout(() => elements.answerInput.focus(), 0);
 }
 
@@ -297,19 +303,34 @@ function renderProgress() {
   elements.progressFill.style.width = `${progress}%`;
 }
 
+function setTransitionLock(active) {
+  elements.answerInput.disabled = active;
+  elements.checkButton.disabled = active;
+}
+
 function advanceStep() {
   if (state.currentStepIndex >= STEPS.length - 1) {
     return;
   }
-  elements.card?.classList.remove("card--advance");
+  if (isTransitioning) {
+    return;
+  }
+  isTransitioning = true;
+  elements.card?.classList.remove("card--transition");
   void elements.card?.offsetWidth;
-  elements.card?.classList.add("card--advance");
-  state.currentStepIndex = Math.min(
-    state.currentStepIndex + 1,
-    STEPS.length - 1,
-  );
-  saveState();
-  render();
+  elements.card?.classList.add("card--transition");
+  setTransitionLock(true);
+  const nextIndex = Math.min(state.currentStepIndex + 1, STEPS.length - 1);
+  window.setTimeout(() => {
+    state.currentStepIndex = nextIndex;
+    saveState();
+    render();
+  }, TRANSITION_SWAP_MS);
+  window.setTimeout(() => {
+    elements.card?.classList.remove("card--transition");
+    isTransitioning = false;
+    renderStep();
+  }, TRANSITION_DURATION);
 }
 
 function renderStep() {
@@ -358,6 +379,10 @@ function renderStep() {
     elements.answerInput.required = false;
     elements.checkButton.textContent = step.nextLabel || "Дальше";
     setMessage("", null);
+  }
+
+  if (isTransitioning) {
+    setTransitionLock(true);
   }
 }
 
