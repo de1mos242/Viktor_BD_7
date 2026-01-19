@@ -116,19 +116,27 @@ body {
   padding: 4px;
 }
 
-.card--advance {
-  animation: cardAdvance 0.4s ease;
+.card--transition {
+  animation: cardTransition 3s ease-in-out;
+  pointer-events: none;
 }
 
-@keyframes cardAdvance {
+@keyframes cardTransition {
   0% {
-    transform: scale(1);
+    opacity: 1;
+    transform: translateY(0) scale(1);
   }
-  50% {
-    transform: scale(1.01);
+  40% {
+    opacity: 0;
+    transform: translateY(-12px) scale(0.98);
+  }
+  60% {
+    opacity: 0;
+    transform: translateY(12px) scale(0.98);
   }
   100% {
-    transform: scale(1);
+    opacity: 1;
+    transform: translateY(0) scale(1);
   }
 }
 
