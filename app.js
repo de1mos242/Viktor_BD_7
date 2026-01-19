@@ -257,10 +257,15 @@ function setMessage(text, type) {
   if (type) {
     elements.messageBox.classList.add(`message--${type}`);
   }
+  if (text) {
+    elements.messageBox.classList.add("message--visible");
+  }
 }
 
 function setSuccessState(step) {
   setMessage("Верно!", "success");
+  elements.answerInput.classList.remove("card__input--error");
+  elements.answerInput.removeAttribute("aria-invalid");
   elements.answerInput.disabled = true;
   elements.checkButton.disabled = true;
 }
@@ -269,6 +274,8 @@ function setActiveState() {
   elements.answerInput.disabled = false;
   elements.checkButton.disabled = false;
   elements.answerInput.value = "";
+  elements.answerInput.classList.remove("card__input--error");
+  elements.answerInput.removeAttribute("aria-invalid");
   setMessage("", null);
   focusInput();
 }
@@ -299,7 +306,9 @@ function handleCorrect(step) {
 
 function handleWrong(step) {
   saveState();
-  setMessage("Почти! Попробуй ещё раз.", "error");
+  setMessage("Код неправильный.", "error");
+  elements.answerInput.classList.add("card__input--error");
+  elements.answerInput.setAttribute("aria-invalid", "true");
 }
 
 function renderProgress() {
