@@ -142,7 +142,7 @@ const STEPS = [
 
 const DEFAULT_STEP_IMAGE = "images/intro-comics.png";
 const TRANSITION_DURATION = 3000;
-const TRANSITION_SWAP_MS = 1400;
+const TRANSITION_SWAP_MS = 900;
 
 const elements = {
   progressFill: document.getElementById("progressFill"),
@@ -329,6 +329,13 @@ function advanceStep() {
   window.setTimeout(() => {
     elements.card?.classList.remove("card--transition");
     isTransitioning = false;
+    const step = currentStep();
+    if (!(step.type === "task" && state.solvedSteps.includes(step.id))) {
+      setTransitionLock(false);
+    }
+    if (step.type === "task" && !state.solvedSteps.includes(step.id)) {
+      focusInput();
+    }
   }, TRANSITION_DURATION);
 }
 
