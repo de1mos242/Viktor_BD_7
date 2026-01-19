@@ -393,7 +393,9 @@ function renderStep() {
     elements.answerLabel.hidden = true;
     elements.answerInput.hidden = true;
     elements.answerInput.required = false;
+    elements.answerInput.disabled = true;
     elements.checkButton.textContent = step.nextLabel || "Дальше";
+    elements.checkButton.disabled = false;
     setMessage("", null);
   }
 
