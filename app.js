@@ -372,6 +372,9 @@ function createQuestApp({
 
   function renderStep() {
     const step = currentStep();
+    if (!step) {
+      return;
+    }
     elements.stepTitle.textContent = step.title;
     if (step.subtitle) {
       elements.stepSubtitle.textContent = step.subtitle;
