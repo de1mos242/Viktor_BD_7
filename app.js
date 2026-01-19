@@ -285,6 +285,13 @@ function createQuestApp({
     focusInput();
   }
 
+  function focusInput() {
+    if (isTransitioning) {
+      return;
+    }
+    window.setTimeout(() => elements.answerInput.focus(), 0);
+  }
+
   function launchFirework() {
     if (typeof window.confetti !== "function") {
       return;
@@ -340,27 +347,9 @@ function createQuestApp({
     elements.progressFill.style.width = `${progress}%`;
   }
 
-  if (step.type === "task") {
-    elements.answerForm.hidden = false;
-    elements.answerLabel.hidden = false;
-    elements.answerInput.hidden = false;
-    elements.answerInput.required = true;
-    elements.checkButton.textContent = "Проверить";
-    const solved = state.solvedSteps.includes(step.id);
-    if (solved) {
-      setSuccessState(step);
-    } else {
-      setActiveState();
-    }
-  } else {
-    elements.answerForm.hidden = false;
-    elements.answerLabel.hidden = true;
-    elements.answerInput.hidden = true;
-    elements.answerInput.required = false;
-    elements.answerInput.disabled = true;
-    elements.checkButton.textContent = step.nextLabel || "Дальше";
-    elements.checkButton.disabled = false;
-    setMessage("", null);
+  function setTransitionLock(active) {
+    elements.answerInput.disabled = active;
+    elements.checkButton.disabled = active;
   }
 
   function advanceStep() {
