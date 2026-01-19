@@ -20,6 +20,8 @@
 body {
   margin: 0;
   min-height: 100vh;
+  height: 100vh;
+  overflow: hidden;
   background:
     repeating-linear-gradient(
       45deg,
@@ -35,8 +37,12 @@ body {
 .app {
   max-width: 760px;
   margin: 0 auto;
-  padding: 16px 16px 48px;
+  padding: 16px 16px 24px;
   position: relative;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 
 .app__header {
@@ -87,6 +93,10 @@ body {
   border: 2px solid rgba(76, 175, 80, 0.3);
   position: relative;
   overflow: hidden;
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 
 .card__heading,
@@ -97,10 +107,11 @@ body {
 
 .card__image {
   width: 100%;
-  max-height: 80vh;
+  max-height: 100%;
+  flex: 1 1 auto;
+  min-height: 0;
   object-fit: contain;
   border-radius: 18px;
-  margin-bottom: 12px;
   background: rgba(0, 0, 0, 0.2);
   padding: 4px;
 }
@@ -124,6 +135,7 @@ body {
 .card__form {
   display: grid;
   gap: 12px;
+  margin-top: auto;
 }
 
 .card__label {
