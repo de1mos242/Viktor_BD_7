@@ -297,6 +297,22 @@ function handleWrong(step) {
   elements.answerInput.setAttribute("aria-invalid", "true");
 }
 
+function launchFirework() {
+  if (typeof window.confetti !== "function") {
+    return;
+  }
+  const originX = Math.random() * 0.6 + 0.2;
+  const originY = Math.random() * 0.4 + 0.1;
+  window.confetti({
+    particleCount: 80,
+    spread: 70,
+    startVelocity: 40,
+    gravity: 1.1,
+    scalar: 0.9,
+    origin: { x: originX, y: originY },
+  });
+}
+
 function renderProgress() {
   const stepNumber = state.currentStepIndex + 1;
   const progress = (stepNumber / STEPS.length) * 100;
@@ -377,7 +393,9 @@ function renderStep() {
     elements.answerLabel.hidden = true;
     elements.answerInput.hidden = true;
     elements.answerInput.required = false;
+    elements.answerInput.disabled = true;
     elements.checkButton.textContent = step.nextLabel || "Дальше";
+    elements.checkButton.disabled = false;
     setMessage("", null);
   }
 
@@ -401,7 +419,11 @@ function setupEvents() {
     event.preventDefault();
     const step = currentStep();
     if (step.type !== "task") {
-      advanceStep();
+      if (step.id === "final") {
+        launchFirework();
+      } else {
+        advanceStep();
+      }
       return;
     }
     if (state.solvedSteps.includes(step.id)) {
