@@ -94,7 +94,7 @@ const STEPS = [
 
 const DEFAULT_STEP_IMAGE = "images/intro-comics.png";
 const TRANSITION_DURATION = 3000;
-const TRANSITION_SWAP_RATIO = 0.4;
+const TRANSITION_SWAP_RATIO = 0.5;
 const FIREWORKS_DURATION_MS = 6000;
 
 function getDefaultState() {
