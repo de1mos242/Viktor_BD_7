@@ -1,0 +1,25 @@
+{
+  "name": "Майнкрафт-квест: Подарок от крипера",
+  "short_name": "Майнкрафт-квест",
+  "description": "Домашний квест по мотивам Майнкрафта.",
+  "start_url": ".",
+  "scope": ".",
+  "display": "standalone",
+  "display_override": ["fullscreen", "standalone"],
+  "background_color": "#0b1a20",
+  "theme_color": "#0b1a20",
+  "icons": [
+    {
+      "src": "images/pwa-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "images/pwa-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    }
+  ]
+}
