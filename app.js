@@ -451,12 +451,14 @@ function createQuestApp({
       elements.stepHint.hidden = true;
     }
 
-    if (step.codeText) {
-      elements.stepCode.textContent = step.codeText;
-      elements.stepCode.hidden = false;
-    } else {
-      elements.stepCode.textContent = "";
-      elements.stepCode.hidden = true;
+    if (elements.stepCode) {
+      if (step.codeText) {
+        elements.stepCode.textContent = step.codeText;
+        elements.stepCode.hidden = false;
+      } else {
+        elements.stepCode.textContent = "";
+        elements.stepCode.hidden = true;
+      }
     }
 
     if (step.type === "task") {
