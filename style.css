@@ -138,19 +138,23 @@ body {
 @keyframes cardTransition {
   0% {
     opacity: 1;
-    transform: translateY(0) scale(1);
+    transform: translateY(0) scale(1) rotate(0deg);
+    filter: blur(0) brightness(1);
   }
   40% {
     opacity: 0;
-    transform: translateY(-12px) scale(0.98);
+    transform: translateY(-18px) scale(0.92) rotate(-2deg);
+    filter: blur(6px) brightness(0.85);
   }
   60% {
     opacity: 0;
-    transform: translateY(12px) scale(0.98);
+    transform: translateY(18px) scale(0.92) rotate(2deg);
+    filter: blur(6px) brightness(0.85);
   }
   100% {
     opacity: 1;
-    transform: translateY(0) scale(1);
+    transform: translateY(0) scale(1) rotate(0deg);
+    filter: blur(0) brightness(1);
   }
 }
 

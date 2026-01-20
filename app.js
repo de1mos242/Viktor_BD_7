@@ -94,7 +94,7 @@ const STEPS = [
 
 const DEFAULT_STEP_IMAGE = "images/intro-comics.png";
 const TRANSITION_DURATION = 3000;
-const TRANSITION_SWAP_MS = 700;
+const TRANSITION_SWAP_RATIO = 0.5;
 const FIREWORKS_DURATION_MS = 6000;
 
 function getDefaultState() {
@@ -118,7 +118,6 @@ function createFireworks(document, window) {
     };
   }
   let instance = null;
-  let stopTimeout = null;
   let activeBursts = 0;
 
   function getInstance() {
@@ -167,10 +166,7 @@ function createFireworks(document, window) {
     }
     fireworks.start();
     activeBursts += 1;
-    if (stopTimeout) {
-      window.clearTimeout(stopTimeout);
-    }
-    stopTimeout = window.setTimeout(() => {
+    window.setTimeout(() => {
       activeBursts = Math.max(activeBursts - 1, 0);
       if (activeBursts === 0) {
         fireworks.stop();
@@ -233,7 +229,9 @@ function createQuestApp({
   const elements = createElements(document);
   const fireworks = createFireworks(document, window);
   const transitionDuration = timing.transitionDuration ?? TRANSITION_DURATION;
-  const transitionSwapMs = timing.transitionSwapMs ?? TRANSITION_SWAP_MS;
+  const transitionSwapMs =
+    timing.transitionSwapMs ??
+    Math.round(transitionDuration * TRANSITION_SWAP_RATIO);
   const storageApi =
     storage ??
     createStorage(window?.localStorage ?? {
