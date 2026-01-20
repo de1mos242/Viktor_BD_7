@@ -359,14 +359,6 @@ function createQuestApp({
     elements.answerInput.classList.remove("card__input--error");
     elements.answerInput.removeAttribute("aria-invalid");
     setMessage("", null);
-    focusInput();
-  }
-
-  function focusInput() {
-    if (isTransitioning) {
-      return;
-    }
-    window.setTimeout(() => elements.answerInput.focus(), 0);
   }
 
   function matchesAnswer(value, step) {

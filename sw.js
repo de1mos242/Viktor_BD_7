@@ -6,7 +6,6 @@ const CORE_ASSETS = [
   "app.js",
   "manifest.json",
   "images/favicon.png",
-  "images/pwa-icon.svg",
   "images/intro-comics.png",
   "images/final-happy-birthday.png",
   "images/task2-sofa.png",
