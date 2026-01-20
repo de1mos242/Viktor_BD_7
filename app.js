@@ -345,7 +345,7 @@ function createQuestApp({
   }
 
   function setSuccessState(step) {
-    setMessage("Верно!", "success");
+    setMessage("", null);
     elements.answerInput.classList.remove("card__input--error");
     elements.answerInput.removeAttribute("aria-invalid");
     elements.answerInput.disabled = true;
