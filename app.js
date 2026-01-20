@@ -125,7 +125,7 @@ const STEPS = [
     prompt: task.prompt,
     image: task.image,
     hint: task.hint,
-    note: task.note,
+    codeText: task.codeText,
     answers: [task.answer],
   })),
   {
