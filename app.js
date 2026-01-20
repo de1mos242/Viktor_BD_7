@@ -166,7 +166,6 @@ function createFireworks(document, window) {
     };
   }
   let instance = null;
-  let stopTimeout = null;
   let activeBursts = 0;
 
   function getInstance() {
@@ -215,10 +214,7 @@ function createFireworks(document, window) {
     }
     fireworks.start();
     activeBursts += 1;
-    if (stopTimeout) {
-      window.clearTimeout(stopTimeout);
-    }
-    stopTimeout = window.setTimeout(() => {
+    window.setTimeout(() => {
       activeBursts = Math.max(activeBursts - 1, 0);
       if (activeBursts === 0) {
         fireworks.stop();
