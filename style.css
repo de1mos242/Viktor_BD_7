@@ -106,12 +106,6 @@ body {
   gap: 12px;
 }
 
-.card__heading,
-.card__prompt,
-.card__note {
-  display: none;
-}
-
 .card__code {
   margin: 0;
   padding: 10px 14px;

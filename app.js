@@ -5,113 +5,68 @@ const TASKS = [
   {
     id: "bed",
     title: "1. Кровать",
-    prompt: "Найди ингредиент под своей кроватью и введи код с листика.",
     image: "images/intro-comics.png",
     answer: "подушка",
-    listHint: "Под кроватью",
-    hint: "Ищи прямо под кроватью.",
   },
   {
     id: "labyrinth-cats",
     title: "2. Лабиринт: котики",
-    prompt:
-      "Найди книжку с лабиринтами под диваном, реши нужный лабиринт и введи ответ.",
     image: "images/task2-sofa.png",
     answer: "шуня",
-    listHint: "Под диваном, лабиринт с кошками",
-    hint: "Под диваном спрятана книжка с лабиринтом про кошек.",
-    note: "Подсказка для офлайна: страница 15, как зовут коричневую кошку.",
   },
   {
     id: "parkour",
     title: "3. Паркур (пол — это лава)",
-    prompt:
-      "Пройди по листикам до спальни, найди ингредиент и введи код с листика.",
     image: "images/task3-floor-is-lava.png",
     answer: "лава",
-    listHint: "В коридоре, идти только по листикам",
-    hint: "Нужно дойти до спальни, наступая только на листики.",
   },
   {
     id: "cipher",
     title: "4. Шифр",
-    prompt:
-      "Под беговой дорожкой лежит шифр. Расшифруй код и введи ответ.",
     image: "images/task4-treadmill.png",
     answer: "крипер крутой",
-    listHint: "Под беговой дорожкой, шифр букв и цифр",
-    hint: "Под беговой дорожкой лежит лист с шифром.",
-    note: "Подсказка для офлайна: лист с задачей поменять цифры с буквами.",
   },
   {
     id: "uno",
     title: "5. Книга Уно",
-    prompt:
-      "В книжном шкафу лежит две книги Уно. В красной — ингредиент и код.",
     image: "images/task5-uno.png",
     answer: "чтение",
-    listHint: "В красной книге Уно в шкафу",
-    hint: "Посмотри красную книгу Уно в шкафу.",
   },
   {
     id: "chess",
     title: "6. Шахматы",
-    prompt: "В коробке с шахматами лежит ингредиент и код.",
     image: "images/task6-checkmate.png",
     answer: "шах",
-    listHint: "В коробке с шахматами",
-    hint: "Открой коробку с шахматами.",
   },
   {
     id: "labyrinth-toys",
     title: "7. Лабиринт: игрушки",
-    prompt:
-      "Найди книжку с лабиринтами за дверью, реши нужный лабиринт и введи ответ.",
     image: "images/task7-behind-door.png",
     answer: "10",
-    listHint: "Книжка за дверью, лабиринт с роботами",
-    hint: "Книжка с лабиринтами прикреплена за дверью.",
-    note: "Подсказка для офлайна: страница 33, сколько очков у робота.",
   },
   {
     id: "lego",
     title: "8. Лего фигурки",
-    prompt:
-      "Фигурки лего держат бумажки. Найди ингредиент и введи код.",
     image: "images/task8-lego.png",
     answer: "лего",
-    listHint: "В комнате у фигурок лего",
-    hint: "Фигурки лего держат бумажки с кодами.",
   },
   {
     id: "furnace",
     title: "9. Майнкрафт печка",
-    prompt:
-      "Догадайся, что получится из рецепта на картинке, и найди код в печке.",
     image: "images/task9-furnace.png",
     answer: "хлеб",
-    listHint: "Печь, рецепт на картинке",
-    hint: "Подумай, что получится в печке из рецепта.",
   },
   {
     id: "invisible-ink",
     title: "10. Невидимый код",
-    prompt:
-      "Собери торт из ингредиентов, подсвети ультрафиолетом и введи слово.",
     image: "images/task10-invisible-ink.png",
     answer: "супер",
-    listHint: "На обороте торта скрытое слово",
-    hint: "Посвети ультрафиолетом на торт.",
   },
   {
     id: "suitcase",
     title: "11. Чемодан",
-    prompt:
-      "В коридоре чемодан с кодовым замком. Прочитай код словами и введи ответ.",
     image: "images/task11-suitcase.png",
     answer: "подарок",
-    listHint: "Чемодан в коридоре",
-    hint: "Код замка написан словами.",
     codeText: "КОД: пять шесть семь",
   },
 ];
@@ -121,10 +76,7 @@ const STEPS = [
     id: task.id,
     type: "task",
     title: task.title,
-    subtitle: "Найди ингредиент",
-    prompt: task.prompt,
     image: task.image,
-    hint: task.hint,
     codeText: task.codeText,
     answers: [task.answer],
   })),
@@ -235,10 +187,6 @@ function createElements(document) {
   return {
     progressFill: document.getElementById("progressFill"),
     card: document.getElementById("card"),
-    stepTitle: document.getElementById("stepTitle"),
-    stepSubtitle: document.getElementById("stepSubtitle"),
-    stepPrompt: document.getElementById("stepPrompt"),
-    stepHint: document.getElementById("stepHint"),
     stepCode: document.getElementById("stepCode"),
     stepImage: document.getElementById("stepImage"),
     answerLabel: document.getElementById("answerLabel"),
@@ -426,22 +374,9 @@ function createQuestApp({
 
   function renderStep() {
     const step = currentStep();
-    elements.stepTitle.textContent = step.title;
-    elements.stepSubtitle.textContent = step.subtitle || "";
-    elements.stepSubtitle.hidden = !step.subtitle;
-    elements.stepPrompt.textContent = step.prompt;
-
     elements.stepImage.src = step.image || DEFAULT_STEP_IMAGE;
     elements.stepImage.alt = step.title;
     elements.stepImage.hidden = false;
-
-    if (step.hint) {
-      elements.stepHint.textContent = `Подсказка: ${step.hint}`;
-      elements.stepHint.hidden = false;
-    } else {
-      elements.stepHint.textContent = "";
-      elements.stepHint.hidden = true;
-    }
 
     if (elements.stepCode) {
       if (step.codeText) {
