@@ -112,7 +112,7 @@ const TASKS = [
     answer: "подарок",
     listHint: "Чемодан в коридоре",
     hint: "Код замка написан словами.",
-    note: "КОД: два два ноль один.",
+    codeText: "КОД: пять шесть семь",
   },
 ];
 
@@ -125,7 +125,7 @@ const STEPS = [
     prompt: task.prompt,
     image: task.image,
     hint: task.hint,
-    note: task.note,
+    codeText: task.codeText,
     answers: [task.answer],
   })),
   {
@@ -239,7 +239,7 @@ function createElements(document) {
     stepSubtitle: document.getElementById("stepSubtitle"),
     stepPrompt: document.getElementById("stepPrompt"),
     stepHint: document.getElementById("stepHint"),
-    stepNote: document.getElementById("stepNote"),
+    stepCode: document.getElementById("stepCode"),
     stepImage: document.getElementById("stepImage"),
     answerLabel: document.getElementById("answerLabel"),
     answerForm: document.getElementById("answerForm"),
@@ -451,12 +451,14 @@ function createQuestApp({
       elements.stepHint.hidden = true;
     }
 
-    if (step.note) {
-      elements.stepNote.textContent = step.note;
-      elements.stepNote.hidden = false;
-    } else {
-      elements.stepNote.textContent = "";
-      elements.stepNote.hidden = true;
+    if (elements.stepCode) {
+      if (step.codeText) {
+        elements.stepCode.textContent = step.codeText;
+        elements.stepCode.hidden = false;
+      } else {
+        elements.stepCode.textContent = "";
+        elements.stepCode.hidden = true;
+      }
     }
 
     if (step.type === "task") {
