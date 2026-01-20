@@ -48,11 +48,6 @@ function createMockDocument() {
   const ids = [
     "progressFill",
     "card",
-    "stepTitle",
-    "stepSubtitle",
-    "stepPrompt",
-    "stepHint",
-    "stepNote",
     "stepImage",
     "answerLabel",
     "answerForm",
@@ -99,9 +94,9 @@ test("advances to the next step on a correct answer", async () => {
 
   app.init();
 
-  const { answerInput, answerForm, stepTitle } = document.elements;
+  const { answerInput, answerForm, stepImage } = document.elements;
 
-  assert.ok(stepTitle.textContent.includes("1. Кровать"));
+  assert.ok(stepImage.alt.includes("1. Кровать"));
 
   answerInput.value = "подушка";
   answerForm.dispatchEvent({
@@ -111,7 +106,7 @@ test("advances to the next step on a correct answer", async () => {
 
   await new Promise((resolve) => setTimeout(resolve, 0));
 
-  assert.ok(stepTitle.textContent.includes("2. Лабиринт: котики"));
+  assert.ok(stepImage.alt.includes("2. Лабиринт: котики"));
 });
 
 test("shows an error message on a wrong answer", () => {
