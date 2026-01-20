@@ -112,6 +112,19 @@ body {
   display: none;
 }
 
+.card__code {
+  margin: 0;
+  padding: 10px 14px;
+  border-radius: 12px;
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #f8f8f8;
+  font-size: 1.1rem;
+  font-weight: 700;
+  text-align: center;
+  letter-spacing: 0.04em;
+}
+
 .card__image {
   width: 100%;
   max-height: 100%;
