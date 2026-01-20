@@ -359,14 +359,6 @@ function createQuestApp({
     elements.answerInput.classList.remove("card__input--error");
     elements.answerInput.removeAttribute("aria-invalid");
     setMessage("", null);
-    focusInput();
-  }
-
-  function focusInput() {
-    if (isTransitioning) {
-      return;
-    }
-    window.setTimeout(() => elements.answerInput.focus(), 0);
   }
 
   function matchesAnswer(value, step) {
@@ -560,6 +552,14 @@ function createQuestApp({
 if (typeof window !== "undefined" && typeof document !== "undefined") {
   const app = createQuestApp();
   app.init();
+
+  if ("serviceWorker" in navigator) {
+    window.addEventListener("load", () => {
+      navigator.serviceWorker.register("./sw.js").catch((error) => {
+        window?.console?.warn?.("Service worker registration failed.", error);
+      });
+    });
+  }
 }
 
 if (typeof module !== "undefined") {
